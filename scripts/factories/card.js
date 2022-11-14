@@ -20,20 +20,17 @@ export function cardFactory(data) {
             article.setAttribute('data-ingredients', ingredients);
             article.setAttribute('data-appliance', appliance);
             article.setAttribute('data-ustensils', ustensils);
-
         // Header card content
         header.setAttribute('class', 'card_content card_header');
             name.textContent = data.name;
             icon.setAttribute('class', 'far fa-clock')
             time.textContent = data.time
-
         // Main card content
         main.setAttribute('class', 'card_content card_main');
             ingredients.textContent = data.ingredients;
             description.textContent = data.description;
 
-
-        // Show in page
+        // Display in page
         article.appendChild(image);
         article.appendChild(header);
             header.appendChild(name);
@@ -44,127 +41,136 @@ export function cardFactory(data) {
             main.appendChild(ingredients);
             main.appendChild(description);
         return(article);
-    }
+    };
 
-    function getFilterBtn() {
-        // Create filter buttons
+    function blueBtn(){
         const container = document.createElement('div');
-        const ingredients = document.createElement('button');
+        const ingredientsBtn = document.createElement('button');
         const text = document.createElement('h2');
-        const icon = document.createElement('i');
-        const appliance = document.createElement('button');
-        const text2 = document.createElement('h2');
-        const icon2 = document.createElement('i');
-        const ustensils = document.createElement('button');
-        const text3 = document.createElement('h2');
-        const icon3 = document.createElement('i');
-
-        // Buttons container
-        container.setAttribute('class', 'container')
-            // Ingredients button
-            ingredients.setAttribute('class', 'ingredients_button');
-                text.textContent = "Ingredients";
-                icon.setAttribute('class', 'fas fa-chevron-down');
-            // Applicance button
-            appliance.setAttribute('class', 'appliance_button');
-                text2.textContent = "Appareils";
-                icon2.setAttribute('class', 'fas fa-chevron-down');
-            // Ustensils button
-            ustensils.setAttribute('class', 'ustensils_button');
-                text3.textContent = "Ustensiles";
-                icon3.setAttribute('class', 'fas fa-chevron-down');
-
-        // Show in page
-        container.appendChild(ingredients);
-            ingredients.appendChild(text);
-            ingredients.appendChild(icon);
-        container.appendChild(appliance);
-            appliance.appendChild(text2);
-            appliance.appendChild(icon2);
-        container.appendChild(ustensils);
-            ustensils.appendChild(text3);
-            ustensils.appendChild(icon3);
-        return(container)
-    }
-
-    function getFilterInput() {
-        // Create filter inputs
-        const container = document.createElement('div');
-        const ingredients = document.createElement('button');
+        const iconDown = document.createElement('i');
+        const containerDisplayNone = document.createElement('div');
+        const ingredientsInput = document.createElement('button');
         const input = document.createElement('input');
-        const icon = document.createElement('i');
-        const appliance = document.createElement('button');
-        const input2 = document.createElement('input');
-        const icon2 = document.createElement('i');
-        const ustensils = document.createElement('button');
-        const input3 = document.createElement('input');
-        const icon3 = document.createElement('i');
+        const iconUp = document.createElement('i');
+        const ingredientsSearch = document.createElement('button');
+        const textSearch = document.createElement('h2');
+        const iconUp2 = document.createElement('i');
 
-        // Buttons container
-        container.setAttribute('class', 'container input_container')
-            // Ingredients input
-            ingredients.setAttribute('class', 'ingredients_input');
-                icon.setAttribute('class', 'fas fa-chevron-up');
-            // Applicance input
-            appliance.setAttribute('class', 'appliance_input');
-                icon2.setAttribute('class', 'fas fa-chevron-up');
-            // Ustensils input
-            ustensils.setAttribute('class', 'ustensils_input');
-                icon3.setAttribute('class', 'fas fa-chevron-up');
+        // Container
+        container.setAttribute('class', 'container')        
+            // Main button
+            ingredientsBtn.setAttribute('class', 'ingredients ingredients_button');
+            text.textContent = "Ingredients";
+            iconDown.setAttribute('class', 'fas fa-chevron-down');  
+            // Container for buttons
+            containerDisplayNone.setAttribute('class', 'container_display_none');
+                // Search bar
+                ingredientsInput.setAttribute('class', 'ingredients ingredients_input');
+                iconUp.setAttribute('class', 'fas fa-chevron-up');
+                // Search list
+                ingredientsSearch.setAttribute('class', 'ingredients ingredients_list');
+                textSearch.textContent = "Rechercher un ingrédient"
+                iconUp2.setAttribute('class', 'fas fa-chevron-up');
 
-        // Show in page
-        container.appendChild(ingredients);
-            ingredients.appendChild(input);
-            ingredients.appendChild(icon);
-        container.appendChild(appliance);
-            appliance.appendChild(input2);
-            appliance.appendChild(icon2);
-        container.appendChild(ustensils);
-            ustensils.appendChild(input3);
-            ustensils.appendChild(icon3);
-        return(container)
+        // Display in page
+        container.appendChild(ingredientsBtn)
+            ingredientsBtn.appendChild(text);
+            ingredientsBtn.appendChild(iconDown);
+        container.appendChild(containerDisplayNone);
+            containerDisplayNone.appendChild(ingredientsInput);
+                ingredientsInput.appendChild(input);
+                ingredientsInput.appendChild(iconUp);
+            containerDisplayNone.appendChild(ingredientsSearch);
+                ingredientsSearch.appendChild(textSearch);
+                ingredientsSearch.appendChild(iconUp2);
+        return (container);
     }
 
-    function getFilterList() {
-        // Create filter inputs
+    function greenBtn(){
         const container = document.createElement('div');
-        const ingredients = document.createElement('button');
+        const applianceBtn = document.createElement('button');
         const text = document.createElement('h2');
-        const icon = document.createElement('i');
-        const appliance = document.createElement('button');
-        const text2 = document.createElement('h2');
-        const icon2 = document.createElement('i');
-        const ustensils = document.createElement('button');
-        const text3 = document.createElement('h2');
-        const icon3 = document.createElement('i');
+        const iconDown = document.createElement('i');
+        const containerDisplayNone = document.createElement('div');
+        const applianceInput = document.createElement('button');
+        const input = document.createElement('input');
+        const iconUp = document.createElement('i');
+        const applianceSearch = document.createElement('button');
+        const textSearch = document.createElement('h2');
+        const iconUp2 = document.createElement('i');
 
-        // Buttons container
-        container.setAttribute('class', 'container list_container')
-            // Ingredients input
-            ingredients.setAttribute('class', 'ingredients_list');
-                text.textContent = "Rechercher un ingrédient"
-                icon.setAttribute('class', 'fas fa-chevron-up');
-            // Applicance input
-            appliance.setAttribute('class', 'appliance_list');
-                text2.textContent = "Rechecher un appareil"
-                icon2.setAttribute('class', 'fas fa-chevron-up');
-            // Ustensils input
-            ustensils.setAttribute('class', 'ustensils_list');
-                text3.textContent = "Rechercher un ustensile"
-                icon3.setAttribute('class', 'fas fa-chevron-up');
+        // Container
+        container.setAttribute('class', 'container')
+            // Main button        
+            applianceBtn.setAttribute('class', 'appliance appliance_button');
+            text.textContent = "Appareils";
+            iconDown.setAttribute('class', 'fas fa-chevron-down');
+            // Container for buttons
+            containerDisplayNone.setAttribute('class', 'container_display_none');
+                // Search bar
+                applianceInput.setAttribute('class', 'appliance appliance_input');
+                iconUp.setAttribute('class', 'fas fa-chevron-up');
+                // Search list
+                applianceSearch.setAttribute('class', 'appliance appliance_list');
+                textSearch.textContent = "Rechercher un appareil"
+                iconUp2.setAttribute('class', 'fas fa-chevron-up');
 
-        // Show in page
-        container.appendChild(ingredients);
-            ingredients.appendChild(text);
-            ingredients.appendChild(icon);
-        container.appendChild(appliance);
-            appliance.appendChild(text2);
-            appliance.appendChild(icon2);
-        container.appendChild(ustensils);
-            ustensils.appendChild(text3);
-            ustensils.appendChild(icon3);
-        return(container)
+        // Display in page
+        container.appendChild(applianceBtn)
+            applianceBtn.appendChild(text);
+            applianceBtn.appendChild(iconDown);
+        container.appendChild(containerDisplayNone);
+            containerDisplayNone.appendChild(applianceInput);
+                applianceInput.appendChild(input);
+                applianceInput.appendChild(iconUp);
+            containerDisplayNone.appendChild(applianceSearch);
+                applianceSearch.appendChild(textSearch);
+                applianceSearch.appendChild(iconUp2);
+        return (container);
     }
 
-    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, getFilterBtn, getFilterInput, getFilterList }
+    function redBtn(){
+        const container = document.createElement('div');
+        const ustensilsBtn = document.createElement('button');
+        const text = document.createElement('h2');
+        const iconDown = document.createElement('i');
+        const containerDisplayNone = document.createElement('div');
+        const ustensilsInput = document.createElement('button');
+        const input = document.createElement('input');
+        const iconUp = document.createElement('i');
+        const ustensilsSearch = document.createElement('button');
+        const textSearch = document.createElement('h2');
+        const iconUp2 = document.createElement('i');
+
+        // Container
+        container.setAttribute('class', 'container')
+            // Main button        
+            ustensilsBtn.setAttribute('class', 'ustensils ustensils_button');
+            text.textContent = "Ustensiles";
+            iconDown.setAttribute('class', 'fas fa-chevron-down');
+            // Container for buttons
+            containerDisplayNone.setAttribute('class', 'container_display_none');
+                // Search bar
+                ustensilsInput.setAttribute('class', 'ustensils ustensils_input');
+                iconUp.setAttribute('class', 'fas fa-chevron-up');
+                // Search list
+                ustensilsSearch.setAttribute('class', 'ustensils ustensils_list');
+                textSearch.textContent = "Rechercher un ustensile"
+                iconUp2.setAttribute('class', 'fas fa-chevron-up');
+
+        // Display in page
+        container.appendChild(ustensilsBtn)
+            ustensilsBtn.appendChild(text);
+            ustensilsBtn.appendChild(iconDown);
+        container.appendChild(containerDisplayNone);
+            containerDisplayNone.appendChild(ustensilsInput);
+                ustensilsInput.appendChild(input);
+                ustensilsInput.appendChild(iconUp);
+            containerDisplayNone.appendChild(ustensilsSearch);
+                ustensilsSearch.appendChild(textSearch);
+                ustensilsSearch.appendChild(iconUp2);
+        return (container);
+    }
+
+    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, blueBtn, greenBtn, redBtn }
 }

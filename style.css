@@ -13,7 +13,7 @@
 }
 
 .search_bar {
-    width: 97%;
+    width: 96%;
     background: #E7E7E7;
     border: none;
     border-radius: 5px;
@@ -25,15 +25,9 @@
 
 .filter_section {
     display: flex;
-    flex-direction: column;
     width: 100%;
-    padding: 0 100px;
+    padding: 20px 100px;
     font-size: 18px;
-}
-
-.container {
-    display: flex;
-    flex-wrap: wrap;
     gap: 20px;
 }
 
@@ -41,8 +35,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    width: 170px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     color: white;
@@ -55,37 +48,54 @@
     color: white;
     font-family: 'Lato';
     width: 50%;
+    height: 50px;
 }
 
-.input_container button,
-.list_container button {
+.container_display_none button{
     display: none;
-}
-
-.list_container button {
-    width: 667px;
-}
-
-.ingredients_button,
-.ingredients_input,
-.ingredients_list {
-    background-color: #3282F7;
-}
-
-.appliance_button,
-.appliance_input,
-.appliance_list {
-    background-color: #68D9A4;
-}
-
-.ustensils_button,
-.ustensils_input,
-.ustensils_list {
-    background-color: #ED6454;
 }
 
 button h2 {
     font-size: 18px;
+}
+
+.ingredients {
+    background-color: #3282F7;
+}
+
+.appliance {
+    background-color: #68D9A4;
+}
+
+.ustensils {
+    background-color: #ED6454;
+}
+
+.ingredients_button,
+.appliance_button,
+.ustensils_button {
+    width: 170px;
+}
+
+.ingredients_input,
+.appliance_input,
+.ustensils_input {
+    width: 223px;
+}
+
+.ingredients_list,
+.appliance_list,
+.ustensils_list {
+    width: 667px;
+}
+
+.ingredients_input,
+.appliance_input,
+.ustensils_input,
+.ingredients_list,
+.appliance_list,
+.ustensils_list {
+    display: none;
 }
 
 /* RECIPE CARDS */
