@@ -30,6 +30,7 @@ async function init() {
                 input.style.display = 'flex';
                 button.style.display = 'none';
             });
+
             // Display search list
             buttonIconDown.addEventListener('click', function(e){
                 list.style.display = 'flex';

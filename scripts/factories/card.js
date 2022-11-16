@@ -1,6 +1,7 @@
 export function cardFactory(data) {
     const { id, name, servings, ingredients, time, description, appliance, ustensils } = data;
-
+    // console.log(ingredients);
+    
     // RECIPE CARDS
     function getCardDOM(){
         // Create card element
@@ -12,14 +13,13 @@ export function cardFactory(data) {
         const icon = document.createElement('i');
         const time = document.createElement('h3');
         const main = document.createElement('main');
-        const ingredients = document.createElement('p');
+        const ingredientsList = document.createElement('ul');
+        const ingredientsListValue = document.createElement('li');
         const description = document.createElement('p');
 
         // Recipe informations for filter
         article.setAttribute('class', 'recipe_card');
-            article.setAttribute('data-ingredients', ingredients);
-            article.setAttribute('data-appliance', appliance);
-            article.setAttribute('data-ustensils', ustensils);
+            article.setAttribute('data-id', id);
         // Header card content
         header.setAttribute('class', 'card_content card_header');
             name.textContent = data.name;
@@ -27,7 +27,12 @@ export function cardFactory(data) {
             time.textContent = data.time
         // Main card content
         main.setAttribute('class', 'card_content card_main');
-            ingredients.textContent = data.ingredients;
+
+            for(let key in ingredients){
+                let objects = ingredients[key];
+                ingredientsListValue.textContent = `${objects.ingredient}: ${objects.quantity} ${objects.unit}`
+            }
+            
             description.textContent = data.description;
 
         // Display in page
@@ -38,7 +43,8 @@ export function cardFactory(data) {
                 alignIcon.appendChild(icon);
                 alignIcon.appendChild(time);
         article.appendChild(main);
-            main.appendChild(ingredients);
+            main.appendChild(ingredientsList);
+                ingredientsList.appendChild(ingredientsListValue);
             main.appendChild(description);
         return(article);
     };
@@ -69,7 +75,7 @@ export function cardFactory(data) {
                 iconUp.setAttribute('class', 'fas fa-chevron-up');
                 // Search list
                 ingredientsSearch.setAttribute('class', 'ingredients ingredients_list');
-                textSearch.textContent = "Rechercher un ingrédient"
+                textSearch.textContent = "Rechercher un ingrédient";
                 iconUp2.setAttribute('class', 'fas fa-chevron-up');
 
         // Display in page
