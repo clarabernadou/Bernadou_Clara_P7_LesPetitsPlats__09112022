@@ -31,7 +31,6 @@ export function cardFactory(data) {
             ingredients.forEach(element => {
                 let all = `${element.ingredient}: ${element.quantity} ${element.unit}`;
                 all = all.replace("undefined", "");
-                console.log(element);
                 text.push(all)
                 ingredientsList.textContent = text.join(` `);
             });            
@@ -181,5 +180,56 @@ export function cardFactory(data) {
         return (container);
     }
 
-    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, blueBtn, greenBtn, redBtn }
+    function blueTag(){
+        const container = document.createElement('div');
+        const tag = document.createElement('div');
+        const search = document.createElement('p');
+        const icon = document.createElement('i');
+
+        container.setAttribute('class', 'tag_container');
+        tag.setAttribute('class', 'tag blue_tag');
+        search.textContent = "TAG";
+        icon.setAttribute('class', 'far fa-times-circle');
+
+        container.appendChild(tag);
+            tag.appendChild(search);
+            tag.appendChild(icon);
+        return (container);
+    }
+
+    function greenTag(){
+        const container = document.createElement('div');
+        const tag = document.createElement('div');
+        const search = document.createElement('p');
+        const icon = document.createElement('i');
+
+        container.setAttribute('class', 'tag_container');
+        tag.setAttribute('class', 'tag green_tag');
+        search.textContent = "TAG";
+        icon.setAttribute('class', 'far fa-times-circle');
+
+        container.appendChild(tag);
+            tag.appendChild(search);
+            tag.appendChild(icon);
+        return (container);
+    }
+
+    function redTag(){
+        const container = document.createElement('div');
+        const tag = document.createElement('div');
+        const search = document.createElement('p');
+        const icon = document.createElement('i');
+
+        container.setAttribute('class', 'tag_container');
+        tag.setAttribute('class', 'tag red_tag');
+        search.textContent = "TAG";
+        icon.setAttribute('class', 'far fa-times-circle');
+
+        container.appendChild(tag);
+            tag.appendChild(search);
+            tag.appendChild(icon);
+        return (container);
+    }
+
+    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, blueBtn, greenBtn, redBtn, blueTag, greenTag, redTag }
 }

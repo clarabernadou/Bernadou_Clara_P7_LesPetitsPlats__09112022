@@ -27,6 +27,41 @@ body {
     font-size: 18px;
 }
 
+/* TAGS */
+
+.tag_section {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 20px 100px 0 100px;
+    gap: 20px;
+}
+
+.tag {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+    width: 107px;
+    height: 37px;
+    border-radius: 5px;
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.blue_tag {
+    background: #3282F7;
+}
+
+.green_tag {
+    background: #68D9A4;
+}
+
+.red_tag {
+    background: #ED6454;
+}
+
 /* FILTERS */
 
 .filter_section {

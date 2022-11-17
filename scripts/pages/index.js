@@ -6,7 +6,31 @@ getRecipes()
 async function init() {
     const { recipes } = await getRecipes();
 
-    // DISPLAY BLUE BUTTONS
+/* ---------------------------------------------------------- TAGS ---------------------------------------------------------- */
+
+    async function displayBlueTag(recipes){
+        const tagSection = document.querySelector(".tag_section");
+        const cardModel = cardFactory(recipes);
+        const CardDOM = cardModel.blueTag();
+        tagSection.appendChild(CardDOM);       
+    };
+
+    async function displayGreenTag(recipes){
+        const tagSection = document.querySelector(".tag_section");
+        const cardModel = cardFactory(recipes);
+        const CardDOM = cardModel.greenTag();
+        tagSection.appendChild(CardDOM);       
+    };
+
+    async function displayRedTag(recipes){
+        const tagSection = document.querySelector(".tag_section");
+        const cardModel = cardFactory(recipes);
+        const CardDOM = cardModel.redTag();
+        tagSection.appendChild(CardDOM);       
+    };
+
+/* ---------------------------------------------------------- BUTTONS ---------------------------------------------------------- */
+
     async function displayBlueBtn(recipes){
         const filterSection = document.querySelector(".filter_section");
         const cardModel = cardFactory(recipes);
@@ -52,7 +76,7 @@ async function init() {
             });
         };
 
-    // DISPLAY GREEN BUTTONS
+
     async function displayGreenBtn(recipes){
         const filterSection = document.querySelector(".filter_section");
         const cardModel = cardFactory(recipes);
@@ -96,7 +120,6 @@ async function init() {
             });
         };
 
-    // DISPLAY RED BUTTONS
     async function displayRedBtn(recipes){
         const filterSection = document.querySelector(".filter_section");
         const cardModel = cardFactory(recipes);
@@ -141,6 +164,8 @@ async function init() {
             });
         };
 
+/* --------------------------------------------------------- RECIPE CARDS --------------------------------------------------------- */
+
     // DISPLAY RECIPES
     async function displayData(recipes) {
         const cardSection = document.querySelector(".card_section");
@@ -151,12 +176,20 @@ async function init() {
         });
     };
 
+    // TAG
+    displayBlueTag(recipes);
+    displayGreenTag(recipes);
+    displayRedTag(recipes);
+
+    // BUTTONS
     displayBlueBtn(recipes);
         blueBtnOnClick();
     displayGreenBtn(recipes);
         greenBtnOnClick();
     displayRedBtn(recipes);
         redBtnOnClick();
+
+    // CARDS
     displayData(recipes);
 };
     
