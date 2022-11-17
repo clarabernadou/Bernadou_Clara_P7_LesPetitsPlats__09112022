@@ -1,6 +1,5 @@
 export function cardFactory(data) {
     const { id, name, servings, ingredients, time, description, appliance, ustensils } = data;
-    // console.log(ingredients);
     
     // RECIPE CARDS
     function getCardDOM(){
@@ -13,8 +12,7 @@ export function cardFactory(data) {
         const icon = document.createElement('i');
         const time = document.createElement('h3');
         const main = document.createElement('main');
-        const ingredientsList = document.createElement('ul');
-        const ingredientsListValue = document.createElement('li');
+        const ingredientsList = document.createElement('p');
         const description = document.createElement('p');
 
         // Recipe informations for filter
@@ -28,12 +26,18 @@ export function cardFactory(data) {
         // Main card content
         main.setAttribute('class', 'card_content card_main');
 
-            for(let key in ingredients){
-                let objects = ingredients[key];
-                ingredientsListValue.textContent = `${objects.ingredient}: ${objects.quantity} ${objects.unit}`
-            }
-            
-            description.textContent = data.description;
+        for(let i = 0; i < id; i ++){
+            var text = new Array();
+            ingredients.forEach(element => {
+                let all = `${element.ingredient}: ${element.quantity} ${element.unit}`;
+                all = all.replace("undefined", "");
+                console.log(element);
+                text.push(all)
+                ingredientsList.textContent = text.join(` `);
+            });            
+        };
+
+        description.textContent = data.description;
 
         // Display in page
         article.appendChild(image);
@@ -44,7 +48,6 @@ export function cardFactory(data) {
                 alignIcon.appendChild(time);
         article.appendChild(main);
             main.appendChild(ingredientsList);
-                ingredientsList.appendChild(ingredientsListValue);
             main.appendChild(description);
         return(article);
     };
