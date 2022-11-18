@@ -29,10 +29,10 @@ export function cardFactory(data) {
         for(let i = 0; i < id; i ++){
             var text = new Array();
             ingredients.forEach(element => {
-                let all = `${element.ingredient}: ${element.quantity} ${element.unit}`;
-                all = all.replace("undefined", "");
+                let all = `${element.ingredient}: ${element.quantity} ${element.unit}\n`;
+                all = all.replace(/undefined/g, "");
                 text.push(all)
-                ingredientsList.textContent = text.join(` `);
+                ingredientsList.textContent = text.join('');
             });            
         };
 
