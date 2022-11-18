@@ -176,6 +176,26 @@ async function init() {
         });
     };
 
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+
+    function searchViaBar(recipes) {
+        const searchBar = document.querySelector('.search_bar');
+        searchBar.addEventListener('change', function(e){
+            let value = searchBar.value; 
+            let result = recipes.filter(r => r.name == value);
+            console.log(result);
+            
+            result.forEach((element) => {
+                const cardSection = document.querySelector('.card_section');
+                cardSection.innerHTML = "";
+
+                const cardModel = cardFactory(element);
+                const CardDOM = cardModel.getCardDOM();
+                cardSection.appendChild(CardDOM);
+            });
+        });
+    }
+
     // TAG
     displayBlueTag(recipes);
     displayGreenTag(recipes);
@@ -191,6 +211,10 @@ async function init() {
 
     // CARDS
     displayData(recipes);
+
+    // SEARCH BAR FILTER
+    searchViaBar(recipes);
+
 };
     
 init();
