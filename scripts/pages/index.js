@@ -198,12 +198,26 @@ async function init() {
                         // And I push in the table to group all the ingredients of the recipe
                         recipeIngredients.push(ingredient.ingredient);
                     });
-
-                    // If the desired ingredient is in the recipe...
-                    if(recipeIngredients.includes(search)){
-                        cardSection.innerHTML = "";
-                        recipeWithSearch.push(recipe);
-                    }
+                    
+                    // Function to filter with letters
+                    function filtreTexte(arr, requete) {
+                        return arr.filter(function (el) {
+                            return el.toLowerCase().indexOf(requete.toLowerCase()) !== -1;
+                        });
+                    };
+                    
+                    // Search ingredient
+                    let ingredientSearch = filtreTexte(recipeIngredients, search);
+    
+                    // In all the ingredients of all the recipes array, I get all the ingredients one by one
+                    recipeIngredients.forEach(ingredient => {
+                        // If the desired ingredient exists
+                        if(ingredientSearch == ingredient) {
+                            cardSection.innerHTML = "";
+                            recipeWithSearch.push(recipe);
+                        }                        
+                    });
+                    
                 });
                 // Display recipes with the ingredients we are looking for
                 recipeWithSearch.forEach((recipe) => {
