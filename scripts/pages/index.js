@@ -181,18 +181,37 @@ async function init() {
     function searchViaBar(recipes) {
         const searchBar = document.querySelector('.search_bar');
         searchBar.addEventListener('change', function(e){
-            let value = searchBar.value; 
-            let result = recipes.filter(r => r.name == value);
-            console.log(result);
-            
-            result.forEach((element) => {
-                const cardSection = document.querySelector('.card_section');
-                cardSection.innerHTML = "";
+            let search = searchBar.value;
 
-                const cardModel = cardFactory(element);
-                const CardDOM = cardModel.getCardDOM();
-                cardSection.appendChild(CardDOM);
-            });
+            if(search.length < 3) {
+                alert('Veuillez entrer plus de 3 caractères');
+            }else{
+                const cardSection = document.querySelector(".card_section");
+                let recipeWithSearch = []; // Array to put the recipes with the desired ingredients
+
+                // In the recipe array I get the recipe
+                recipes.forEach(recipe => {
+                    const recipeIngredients = [];
+
+                    // In the ingredients array I get the ingredient
+                    recipe.ingredients.forEach(ingredient => {
+                        // And I push in the table to group all the ingredients of the recipe
+                        recipeIngredients.push(ingredient.ingredient);
+                    });
+
+                    // If the desired ingredient is in the recipe...
+                    if(recipeIngredients.includes(search)){
+                        cardSection.innerHTML = "";
+                        recipeWithSearch.push(recipe);
+                    }
+                });
+                // Display recipes with the ingredients we are looking for
+                recipeWithSearch.forEach((recipe) => {
+                    const cardModel = cardFactory(recipe);
+                    const CardDOM = cardModel.getCardDOM();
+                    cardSection.appendChild(CardDOM);
+                })
+            }
         });
     }
 
