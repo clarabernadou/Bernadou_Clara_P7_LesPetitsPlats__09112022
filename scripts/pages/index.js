@@ -181,29 +181,32 @@ async function init() {
     function searchViaBar(recipes) {
         const searchBar = document.querySelector('.search_bar');
         const searchIsNull = document.querySelector('.search-null');
-        searchBar.addEventListener('change', function(e){
-            let search = searchBar.value;
 
+        searchBar.addEventListener('change', function(e){
+        let search = searchBar.value;
             if(search.length < 3) {
                 alert('Veuillez entrer plus de 3 caractères');
             }else{
                 const cardSection = document.querySelector(".card_section");
                 let recipeWithSearch = []; // Array to put the recipes with the desired ingredients
+                let recipeSearchIsFilled = false;
 
                 // In the recipe array I get the recipe
                 recipes.forEach(recipe => {
-                    const recipes = [];
+                    const recipesName = [];
+                    const recipesDescription = [];
+                    const recipesIngredients = [];
 
                     // I push in the array to group all the recipe names
-                    recipes.push(recipe.name);
+                    recipesName.push(recipe.name);
 
                     // I push in the array to group all the recipe descriptions
-                    recipes.push(recipe.description);
+                    recipesDescription.push(recipe.description);
 
                     // In the ingredients array I get the ingredient
                     recipe.ingredients.forEach(ingredient => {
                         // And I push in the array to group all the ingredients of the recipe
-                        recipes.push(ingredient.ingredient);
+                        recipesIngredients.push(ingredient.ingredient);
                     });
 
                     // Function to filter with letters
@@ -214,28 +217,45 @@ async function init() {
                     };
                     
                     // Search ingredient
-                    let ingredientSearch = filtreTexte(recipes, search);
+                    let ingredientSearch = filtreTexte(recipesIngredients, search);
+                    let nameSearch = filtreTexte(recipesName, search);
+                    let descriptionSearch = filtreTexte(recipesDescription, search);
     
                     // In all the ingredients of all the recipes array, I get all the ingredients one by one
-                    recipes.forEach(ingredient => {
+                    recipes.forEach(recipe => {
                         // If the desired ingredient exists
-                        if(ingredientSearch == ingredient) {
+                        if(nameSearch == recipe.name || descriptionSearch == recipe.description) {
                             cardSection.innerHTML = "";
                             recipeWithSearch.push(recipe);
-                        }else{
-                            cardSection.innerHTML = "";
-                            searchIsNull.style.display = 'flex';
-                        }                      
+                            recipeSearchIsFilled = true;
+                        };             
                     });
+
+                    recipesIngredients.forEach(ingredient => {
+                        if(ingredientSearch == ingredient){
+                            cardSection.innerHTML = "";
+                            recipeWithSearch.push(recipe);
+                            recipeSearchIsFilled = true;
+                        };
+                    })
                     
                 });
-                // Display recipes with the ingredients we are looking for
-                recipeWithSearch.forEach((recipe) => {
-                    searchIsNull.style.display = 'none';
-                    const cardModel = cardFactory(recipe);
-                    const CardDOM = cardModel.getCardDOM();
-                    cardSection.appendChild(CardDOM);
-                })
+
+                console.log(recipeSearchIsFilled);
+                if(recipeSearchIsFilled == true){
+                    // Display recipes with the ingredients we are looking for
+                    recipeWithSearch.forEach((recipe) => {
+                        searchIsNull.style.display = 'none';
+                        const cardModel = cardFactory(recipe);
+                        const CardDOM = cardModel.getCardDOM();
+                        cardSection.appendChild(CardDOM);
+                    })
+                }else{
+                    console.log('Aucunes recettes');
+                    cardSection.innerHTML = "";
+                    searchIsNull.style.display = 'flex';
+                }
+
             }
         });
     }
