@@ -167,6 +167,13 @@ button h2 {
     gap: 50px;
 }
 
+.search-null {
+    display: none;
+    font-family: 'Lato';
+    font-size: 18px;
+    font-weight: 700;
+}
+
 .recipe_card {
     width: 30%;
     height: 364px;
