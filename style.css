@@ -169,6 +169,7 @@ button h2 {
 
 .search-null {
     display: none;
+    justify-content: center;
     font-family: 'Lato';
     font-size: 18px;
     font-weight: 700;
