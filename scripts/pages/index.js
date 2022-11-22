@@ -191,14 +191,22 @@ async function init() {
 
                 // In the recipe array I get the recipe
                 recipes.forEach(recipe => {
-                    const recipeIngredients = [];
+                    const recipes = [];
+
+                    // I push in the array to group all the recipe names
+                    recipes.push(recipe.name);
+
+                    // I push in the array to group all the recipe descriptions
+                    recipes.push(recipe.description);
 
                     // In the ingredients array I get the ingredient
                     recipe.ingredients.forEach(ingredient => {
-                        // And I push in the table to group all the ingredients of the recipe
-                        recipeIngredients.push(ingredient.ingredient);
+                        // And I push in the array to group all the ingredients of the recipe
+                        recipes.push(ingredient.ingredient);
                     });
-                    
+
+                    console.log(recipes);
+
                     // Function to filter with letters
                     function filtreTexte(arr, requete) {
                         return arr.filter(function (el) {
@@ -207,10 +215,10 @@ async function init() {
                     };
                     
                     // Search ingredient
-                    let ingredientSearch = filtreTexte(recipeIngredients, search);
+                    let ingredientSearch = filtreTexte(recipes, search);
     
                     // In all the ingredients of all the recipes array, I get all the ingredients one by one
-                    recipeIngredients.forEach(ingredient => {
+                    recipes.forEach(ingredient => {
                         // If the desired ingredient exists
                         if(ingredientSearch == ingredient) {
                             cardSection.innerHTML = "";
