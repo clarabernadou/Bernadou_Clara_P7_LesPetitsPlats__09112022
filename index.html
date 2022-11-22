@@ -9,12 +9,17 @@
   <body>
     <header class="header" >
       <img src="assets/logo.png" alt="Les petits plats"/>
-      <input class="search_bar" type="search" placeholder="Rechercher une recette">
+      <div class="search_section">
+        <input class="search_bar" type="search" placeholder="Rechercher une recette"><i class="fas fa-search"></i>
+      </div>
       <section class="tag_section"></section>
       <section class="filter_section"></section>
     </header>
     <main id="main">
-      <section class="card_section"></section>
+      <p class="search-null">Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.</p>
+      <section class="card_section">
+
+      </section>
     </main>
     <script src="scripts/pages/index.js" type="module"></script>
   </body>

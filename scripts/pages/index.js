@@ -180,6 +180,7 @@ async function init() {
 
     function searchViaBar(recipes) {
         const searchBar = document.querySelector('.search_bar');
+        const searchIsNull = document.querySelector('.search-null');
         searchBar.addEventListener('change', function(e){
             let search = searchBar.value;
 
@@ -205,8 +206,6 @@ async function init() {
                         recipes.push(ingredient.ingredient);
                     });
 
-                    console.log(recipes);
-
                     // Function to filter with letters
                     function filtreTexte(arr, requete) {
                         return arr.filter(function (el) {
@@ -223,12 +222,16 @@ async function init() {
                         if(ingredientSearch == ingredient) {
                             cardSection.innerHTML = "";
                             recipeWithSearch.push(recipe);
-                        }                        
+                        }else{
+                            cardSection.innerHTML = "";
+                            searchIsNull.style.display = 'flex';
+                        }                      
                     });
                     
                 });
                 // Display recipes with the ingredients we are looking for
                 recipeWithSearch.forEach((recipe) => {
+                    searchIsNull.style.display = 'none';
                     const cardModel = cardFactory(recipe);
                     const CardDOM = cardModel.getCardDOM();
                     cardSection.appendChild(CardDOM);
