@@ -173,6 +173,7 @@ button h2 {
     font-family: 'Lato';
     font-size: 18px;
     font-weight: 700;
+    text-align: center;
 }
 
 .recipe_card {
