@@ -238,9 +238,19 @@ async function init() {
                     });  
                 });
 
+                // Remove Duplicates from search recipe array
+                const uniqueRecipes = [];
+                console.log(recipeWithSearch);
+                recipeWithSearch.filter(element => {
+                    if (!uniqueRecipes.includes(element)) {
+                        uniqueRecipes.push(element);
+                    }
+                });
+
+                // If there are recipes in search recipe array
                 if(recipeSearchIsFilled == true){
                     // Display recipes with the ingredients we are looking for
-                    recipeWithSearch.forEach((recipe) => {
+                    uniqueRecipes.forEach((recipe) => {
                         searchIsNull.style.display = 'none';
                         const cardModel = cardFactory(recipe);
                         const CardDOM = cardModel.getCardDOM();
