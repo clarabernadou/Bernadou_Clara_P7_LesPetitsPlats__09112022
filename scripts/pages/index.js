@@ -181,13 +181,11 @@ async function init() {
     function searchViaBar(recipes) {
         const searchBar = document.querySelector('.search_bar');
         const searchIsNull = document.querySelector('.search-null');
+        const cardSection = document.querySelector(".card_section");
 
-        searchBar.addEventListener('change', function(e){
-        let search = searchBar.value;
-            if(search.length < 3) {
-                alert('Veuillez entrer plus de 3 caractères');
-            }else{
-                const cardSection = document.querySelector(".card_section");
+        searchBar.addEventListener('keyup', function(e){
+            let search = searchBar.value;
+            if(search.length >= 3) {
                 let recipeWithSearch = []; // Array to put the recipes with the desired ingredients
                 let recipeSearchIsFilled = false;
 
@@ -237,11 +235,9 @@ async function init() {
                             recipeWithSearch.push(recipe);
                             recipeSearchIsFilled = true;
                         };
-                    })
-                    
+                    });  
                 });
 
-                console.log(recipeSearchIsFilled);
                 if(recipeSearchIsFilled == true){
                     // Display recipes with the ingredients we are looking for
                     recipeWithSearch.forEach((recipe) => {
@@ -249,16 +245,18 @@ async function init() {
                         const cardModel = cardFactory(recipe);
                         const CardDOM = cardModel.getCardDOM();
                         cardSection.appendChild(CardDOM);
-                    })
+                    });
                 }else{
-                    console.log('Aucunes recettes');
                     cardSection.innerHTML = "";
                     searchIsNull.style.display = 'flex';
                 }
-
+            }else{
+                cardSection.innerHTML = "";
+                searchIsNull.style.display = 'none';
+                displayData(recipes);
             }
         });
-    }
+    };
 
     // TAG
     displayBlueTag(recipes);
