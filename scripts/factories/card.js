@@ -61,8 +61,10 @@ export function cardFactory(data) {
         const input = document.createElement('input');
         const iconUp = document.createElement('i');
         const ingredientsSearch = document.createElement('button');
+        const alignInsideBtn = document.createElement('div');
         const textSearch = document.createElement('h2');
         const iconUp2 = document.createElement('i');
+        const alignIngredientsList = document.createElement('div');
 
         // Container
         container.setAttribute('class', 'container')        
@@ -77,8 +79,10 @@ export function cardFactory(data) {
                 iconUp.setAttribute('class', 'fas fa-chevron-up');
                 // Search list
                 ingredientsSearch.setAttribute('class', 'ingredients ingredients_list');
+                alignInsideBtn.setAttribute('class', 'align-inside-btn');
                 textSearch.textContent = "Rechercher un ingrédient";
                 iconUp2.setAttribute('class', 'fas fa-chevron-up');
+                alignIngredientsList.setAttribute('class', 'align-list');
 
         // Display in page
         container.appendChild(ingredientsBtn)
@@ -89,8 +93,10 @@ export function cardFactory(data) {
                 ingredientsInput.appendChild(input);
                 ingredientsInput.appendChild(iconUp);
             containerDisplayNone.appendChild(ingredientsSearch);
-                ingredientsSearch.appendChild(textSearch);
-                ingredientsSearch.appendChild(iconUp2);
+                ingredientsSearch.appendChild(alignInsideBtn);
+                    alignInsideBtn.appendChild(textSearch);
+                    alignInsideBtn.appendChild(iconUp2);
+                ingredientsSearch.appendChild(alignIngredientsList);
         return (container);
     }
 
@@ -104,8 +110,10 @@ export function cardFactory(data) {
         const input = document.createElement('input');
         const iconUp = document.createElement('i');
         const applianceSearch = document.createElement('button');
+        const alignInsideBtn = document.createElement('div');
         const textSearch = document.createElement('h2');
         const iconUp2 = document.createElement('i');
+        const alignApplianceList = document.createElement('div');
 
         // Container
         container.setAttribute('class', 'container')
@@ -120,8 +128,10 @@ export function cardFactory(data) {
                 iconUp.setAttribute('class', 'fas fa-chevron-up');
                 // Search list
                 applianceSearch.setAttribute('class', 'appliance appliance_list');
+                alignInsideBtn.setAttribute('class', 'align-inside-btn');
                 textSearch.textContent = "Rechercher un appareil"
                 iconUp2.setAttribute('class', 'fas fa-chevron-up');
+                alignApplianceList.setAttribute('class', 'align-list');
 
         // Display in page
         container.appendChild(applianceBtn)
@@ -132,8 +142,10 @@ export function cardFactory(data) {
                 applianceInput.appendChild(input);
                 applianceInput.appendChild(iconUp);
             containerDisplayNone.appendChild(applianceSearch);
-                applianceSearch.appendChild(textSearch);
-                applianceSearch.appendChild(iconUp2);
+                applianceSearch.appendChild(alignInsideBtn);
+                    alignInsideBtn.appendChild(textSearch);
+                    alignInsideBtn.appendChild(iconUp2);
+                applianceSearch.appendChild(alignApplianceList);
         return (container);
     }
 
@@ -147,8 +159,10 @@ export function cardFactory(data) {
         const input = document.createElement('input');
         const iconUp = document.createElement('i');
         const ustensilsSearch = document.createElement('button');
+        const alignInsideBtn = document.createElement('div');
         const textSearch = document.createElement('h2');
         const iconUp2 = document.createElement('i');
+        const alignUstensilsList = document.createElement('div');
 
         // Container
         container.setAttribute('class', 'container')
@@ -163,8 +177,10 @@ export function cardFactory(data) {
                 iconUp.setAttribute('class', 'fas fa-chevron-up');
                 // Search list
                 ustensilsSearch.setAttribute('class', 'ustensils ustensils_list');
+                alignInsideBtn.setAttribute('class', 'align-inside-btn');
                 textSearch.textContent = "Rechercher un ustensile"
                 iconUp2.setAttribute('class', 'fas fa-chevron-up');
+                alignUstensilsList.setAttribute('class', 'align-list');
 
         // Display in page
         container.appendChild(ustensilsBtn)
@@ -175,8 +191,10 @@ export function cardFactory(data) {
                 ustensilsInput.appendChild(input);
                 ustensilsInput.appendChild(iconUp);
             containerDisplayNone.appendChild(ustensilsSearch);
-                ustensilsSearch.appendChild(textSearch);
-                ustensilsSearch.appendChild(iconUp2);
+                ustensilsSearch.appendChild(alignInsideBtn);
+                    alignInsideBtn.appendChild(textSearch);
+                    alignInsideBtn.appendChild(iconUp2);
+                ustensilsSearch.appendChild(alignUstensilsList);
         return (container);
     }
 
