@@ -124,6 +124,7 @@ async function init() {
         const searchIsNull = document.querySelector('.search-null');
         const cardSection = document.querySelector(".card_section");
 
+        // Word-by-word search function
         function filtreTexte(arr, requete) {
             return arr.filter(function (el) {
                 return el.toLowerCase().indexOf(requete.toLowerCase()) !== -1;
@@ -131,28 +132,31 @@ async function init() {
         };        
 
         searchBar.addEventListener('keyup', function(e){
-            let search = searchBar.value;
+            let search = searchBar.value; // Value entered in the search bar
 
             if(search.length >= 3) {
-                let recipeWithSearch = [];
-                let searchIsFilled = false;
+                let recipeWithSearch = []; // To store search results
+                let searchIsFilled = false; // To display a message if there are no recipes
 
                 recipes.forEach(recipe => {
+                    // Create an array to filter each element word by word after
                     let recipesName = [recipe.name];
                     let recipesDescription = [recipe.description];
-                    let recipesIngredients = [];
-
+                    let recipesIngredients = []; // ⬇️
                     recipe.ingredients.forEach(ingredient => {
                         recipesIngredients = [ingredient.ingredient];
                     });
                     
+                    // Filter each element word by word
                     let ingredientSearch = filtreTexte(recipesIngredients, search);
                     let nameSearch = filtreTexte(recipesName, search);
                     let descriptionSearch = filtreTexte(recipesDescription, search);
 
                     function displayRecipes(){
-                        cardSection.innerHTML = "";
-                        searchIsNull.style.display = 'none';
+                        cardSection.innerHTML = ""; // Reset Recipes
+                        searchIsNull.style.display = 'none'; // To hide the message that says there are no recipes
+
+                        // For each recipe, it is displayed with the factory
                         recipeWithSearch.forEach(recipe => {
                             const cardModel = cardFactory(recipe);
                             const CardDOM = cardModel.getCardDOM();
@@ -160,36 +164,38 @@ async function init() {
                         });
                     };
                     
-                    function areThereAnyRecipes(){
-                        if(nameSearch == recipe.name){
-                            recipeWithSearch.push(recipe);
-                            searchIsFilled = true;
-                        }else if(descriptionSearch == recipe.description){
-                            recipeWithSearch.push(recipe);
-                            searchIsFilled = true;
-                        }else{
-                            recipesIngredients.forEach(ingredient => {
-                                if(ingredientSearch == ingredient){
-                                    recipeWithSearch.push(recipe);
-                                    searchIsFilled = true;
-                                };
-                            });
-                        };
+                    // Are there recipe names that match? ⬇️
+                    if(nameSearch == recipe.name){
+                        recipeWithSearch.push(recipe);
+                        searchIsFilled = true;
+                    //  Any descriptions that match? ⬇️
+                    }else if(descriptionSearch == recipe.description){
+                        recipeWithSearch.push(recipe);
+                        searchIsFilled = true;
+                    }else{
+                        recipesIngredients.forEach(ingredient => {
+                            // Which ingredients that match? ⬇️
+                            if(ingredientSearch == ingredient){
+                                recipeWithSearch.push(recipe);
+                                searchIsFilled = true;
+                            };
+                        });
+                    };
 
-                        if(searchIsFilled == true){
-                            displayRecipes()
-                        }else{
-                            cardSection.innerHTML = "";
-                            searchIsNull.style.display = 'flex';
-                        };
-                    }
-                    areThereAnyRecipes()
-
+                    // If there are recipes in the table ⬇️
+                    if(searchIsFilled == true){
+                        displayRecipes()
+                    // Else, there are no recipes in the table ⬇️
+                    }else{
+                        cardSection.innerHTML = ""; // Reset Recipes
+                        searchIsNull.style.display = 'flex'; // To display the message that says there are no recipes
+                    };
                 });
+            // If less than 3 characters are entered in the search bar ⬇️
             }else{
-                cardSection.innerHTML = "";
-                searchIsNull.style.display = 'none';
-                displayData(recipes);
+                cardSection.innerHTML = ""; // Reset Recipes
+                searchIsNull.style.display = 'none'; // To hide the message that says there are no recipes
+                displayData(recipes); // Display Recipes
             };
         });
     };
@@ -201,7 +207,7 @@ async function init() {
     // CARDS
     displayData(recipes);
 
-    // SEARCH BAR FILTER
+    // SEARCH
     search(recipes);
 
 };
