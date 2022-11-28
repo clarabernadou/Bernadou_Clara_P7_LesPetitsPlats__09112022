@@ -57,12 +57,18 @@ body {
     justify-content: space-around;
     align-items: center;
     color: white;
-    width: 107px;
+    width: auto;
     height: 37px;
     border-radius: 5px;
     font-family: Lato;
     font-size: 14px;
     font-weight: 700;
+    gap: 7px;
+    padding: 0 10px;
+}
+
+.tag p {
+    width: 100%;
 }
 
 .blue_tag {
@@ -163,6 +169,13 @@ button h2 {
 .appliance_list,
 .ustensils_list {
     display: none;
+}
+
+.align-list {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    width: 100%;
 }
 
 /* RECIPE CARDS */
