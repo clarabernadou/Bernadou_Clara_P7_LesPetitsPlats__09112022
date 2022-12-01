@@ -62,9 +62,11 @@ export function cardFactory(data) {
         const iconUp = document.createElement('i');
         const ingredientsSearch = document.createElement('button');
         const alignInsideBtn = document.createElement('div');
+        const alignInsideSearchBtn = document.createElement('div');
         const textSearch = document.createElement('h2');
         const iconUp2 = document.createElement('i');
         const alignIngredientsList = document.createElement('div');
+        const alignSearchList = document.createElement('div');
 
         // Container
         container.setAttribute('class', 'container')        
@@ -74,9 +76,14 @@ export function cardFactory(data) {
             iconDown.setAttribute('class', 'fas fa-chevron-down');  
             // Container for buttons
             containerDisplayNone.setAttribute('class', 'container_display_none');
+
                 // Search bar
                 ingredientsInput.setAttribute('class', 'ingredients ingredients_input');
+                alignInsideSearchBtn.setAttribute('class', 'align-inside-btn');
                 iconUp.setAttribute('class', 'fas fa-chevron-up');
+                input.setAttribute('placeholder', "Rechercher un ingrédient");
+                alignSearchList.setAttribute('class', 'align-list align-search-list');
+
                 // Search list
                 ingredientsSearch.setAttribute('class', 'ingredients ingredients_list');
                 alignInsideBtn.setAttribute('class', 'align-inside-btn');
@@ -89,9 +96,13 @@ export function cardFactory(data) {
             ingredientsBtn.appendChild(text);
             ingredientsBtn.appendChild(iconDown);
         container.appendChild(containerDisplayNone);
+
             containerDisplayNone.appendChild(ingredientsInput);
-                ingredientsInput.appendChild(input);
-                ingredientsInput.appendChild(iconUp);
+                ingredientsInput.appendChild(alignInsideSearchBtn);
+                    alignInsideSearchBtn.appendChild(input);
+                    alignInsideSearchBtn.appendChild(iconUp);
+                ingredientsInput.appendChild(alignSearchList);
+
             containerDisplayNone.appendChild(ingredientsSearch);
                 ingredientsSearch.appendChild(alignInsideBtn);
                     alignInsideBtn.appendChild(textSearch);
