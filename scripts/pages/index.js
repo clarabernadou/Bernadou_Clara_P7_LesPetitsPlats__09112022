@@ -143,55 +143,68 @@ async function init() {
             };
         });
 
-        // Search with bar in button
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+        let query = {
+            search : searchBarInBtn.value,
+            ingredientsTags : new Set
+        }
+
         searchBarInBtn.addEventListener('keyup', function(e) {
-            let search = searchBarInBtn.value;
             let ingredientsForDisplay = new Set;
-            let ingredientsArray = [];
-            recipesFound = new Set;
+            query.search = searchBarInBtn.value
 
-            // Collect all recipe ingredients
-            recipes.forEach(recipe => {
-                recipe.ingredients.forEach(ingredient => {
-                    ingredientsArray.push(ingredient.ingredient.toLowerCase());
+            function findIngredientsCanMatch(query) {
+                let ingredientsArray = [];
+                recipes.forEach(recipe => {
+                    recipe.ingredients.forEach(ingredient => {
+                        ingredientsArray.push(ingredient.ingredient.toLowerCase());
+                    });
+                    let recipesSearch = filtreTexte(ingredientsArray, query.search);
+                    recipesSearch.forEach(ingredient => {
+                        ingredientsForDisplay.add(ingredient);                
+                    });
                 });
-
-                // Filter each ingredient (letter by letter) to get a result that matches the search bar
-                let recipesSearch = filtreTexte(ingredientsArray, search);
-                console.log(recipesSearch);
-
-                // Add the ingredients (in lowercase) in the "new Set" so as not to have a duplicate
-                recipesSearch.forEach(ingredient => {
-                    ingredientsForDisplay.add(ingredient);                
-                });
-
-                // Reset the ingredient list
-                ingredientsList.innerHTML = '';           
+            };
             
-                ingredientsForDisplay.forEach(ingredient => { 
-                    // Show found ingredients
+            function ingredientsInSearchList(ingredientsForDisplay) {
+                ingredientsList.innerHTML = ''; 
+                ingredientsForDisplay.forEach(ingredient => {
                     const a = document.createElement('a');
-                    a.setAttribute('class', 'ingredientOnClick');
+                    a.setAttribute('class', 'ingredient-in-list');
                     a.textContent = ingredient;
                     ingredientsList.appendChild(a);
-                    
-                    a.addEventListener('click', function(e) {
+                });
+            };
+            
+            findIngredientsCanMatch(query);
+            ingredientsInSearchList(ingredientsForDisplay)
+
+            const ingredientsInList = document.querySelectorAll('.ingredient-in-list');
+            for(let ingredientInList of ingredientsInList) {
+                ingredientInList.addEventListener('click', function(e) {
+                    query.ingredientsTags.add(ingredientInList.text);
+
+                    function addTagInDOM() {
                         const tag = document.createElement('div');
                         const text = document.createElement('p');
                         const icon = document.createElement('i');
                                     
                         tag.setAttribute('class', 'tag blue_tag');
                         text.setAttribute('class', 'text-tag');
-                        text.textContent = ingredient;
+                        text.textContent = ingredientInList.text;
                         icon.setAttribute('class', 'far fa-times-circle');
                         
                         tagSection.appendChild(tag);
                         tag.appendChild(text);
                         tag.appendChild(icon);
-                    });
-                }); 
-            });
+                    }
+                    addTagInDOM();
+                });
+            };
         });
+
+
     };
 
     // BUTTONS
