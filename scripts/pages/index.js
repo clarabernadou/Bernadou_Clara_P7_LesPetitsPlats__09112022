@@ -6,7 +6,7 @@ getRecipes()
 async function init() {
     const { recipes } = await getRecipes();
 
-/* ---------------------------------------------------------- BUTTONS ---------------------------------------------------------- */
+/* --------------------------------------------------------- FILTERS --------------------------------------------------------- */
 
     async function displayFilterBlueBtn(recipes){
         const filterSection = document.querySelector(".filter_section");
@@ -15,95 +15,31 @@ async function init() {
         filterSection.appendChild(CardDOM);       
     };
 
-        // WHEN CLICK ON BUTTON
-        function whenBtnIsClicked(){
-            const buttonTitle = document.querySelector('.ingredients_button h2');
-            const buttonIconDown = document.querySelector('.ingredients_button .fa-chevron-down');
-            const inputIconUp = document.querySelector('.ingredients_input .fa-chevron-up');
-            const listIconUp = document.querySelector('.ingredients_list .fa-chevron-up');
+    // WHEN CLICK ON BUTTON
+    function whenBtnIsClicked(){
+        const button = document.querySelector('.ingredients_button');
+        const searchBtn = document.querySelector('.ingredients_input');
+        const buttonIconDown = document.querySelector('.ingredients_button .fa-chevron-down');
+        const inputIconUp = document.querySelector('.ingredients_input .fa-chevron-up');
+        const openSearchBarBtn = document.querySelector('.ingredients_button h2');
 
-            const button = document.querySelector('.ingredients_button');
-            const input = document.querySelector('.ingredients_input');
-            const list = document.querySelector('.ingredients_list');
+        openSearchBarBtn.addEventListener('click', function(e){
+            searchBtn.style.display = 'flex';
+            button.style.display = 'none';
+        });
 
-            const ingredientsList = document.querySelector('.align-list');
+        // Display search button
+        buttonIconDown.addEventListener('click', function(e){
+            searchBtn.style.display = 'flex';
+            button.style.display = 'none';
+        });
 
-            // Display search bar
-            buttonTitle.addEventListener('click', function(e){
-                input.style.display = 'flex';
-                button.style.display = 'none';
-            });
-
-            // Display search list
-            buttonIconDown.addEventListener('click', function(e){
-                list.style.display = 'flex';
-                button.style.display = 'none';
-
-                const ingredientsArray = [];
-
-                recipes.forEach(recipe => {
-                    recipe.ingredients.forEach(ingredient => {
-                        ingredientsArray.push(ingredient.ingredient);
-                    });
-                });
-
-                const uniqueIngredients = [];
-                ingredientsArray.filter(ingredient => {
-                    if (!uniqueIngredients.includes(ingredient)) {
-                        uniqueIngredients.push(ingredient);
-                    }
-                });
-
-                uniqueIngredients.forEach(ingredient => {
-                    const ingredients = document.createElement('a');
-                    ingredients.textContent = ingredient;
-                    ingredientsList.appendChild(ingredients);                      
-                });
-
-                const ingredientBtn = document.querySelectorAll('.align-list a');
-
-                for(let ingredient of ingredientBtn){
-                    let notDuplicateFiltre = false;
-                    ingredient.addEventListener('click', function(e) {
-                        if(notDuplicateFiltre == false){
-                            console.log('hello');
-                            notDuplicateFiltre = true;
-                        }else{
-                            console.log('bye');
-                        }
-
-                        const section = document.querySelector('.tag_section')
-
-                        const tag = document.createElement('div');
-                        const search = document.createElement('p');
-                        const icon = document.createElement('i');
-                
-                        tag.setAttribute('class', 'tag blue_tag');
-                        search.textContent = ingredient.text;
-                        search.setAttribute('class', 'blue-text-tag');
-                        icon.setAttribute('class', 'far fa-times-circle');
-                
-                        section.appendChild(tag);
-                        tag.appendChild(search);
-                        tag.appendChild(icon);
-                    });
-                }
-            });
-
-            // Return main button
-            inputIconUp.addEventListener('click', function(e){
-                button.style.display = 'flex';
-                list.style.display = 'none';
-                input.style.display = 'none';
-            }); 
-
-            // Return main button
-            listIconUp.addEventListener('click', function(e){
-                button.style.display = 'flex';
-                list.style.display = 'none';
-                input.style.display = 'none';
-            });
-        };
+        // Return main button
+        inputIconUp.addEventListener('click', function(e){
+            button.style.display = 'flex';
+            searchBtn.style.display = 'none';
+        });
+    };
 
 /* --------------------------------------------------------- RECIPE CARDS --------------------------------------------------------- */
 
@@ -123,74 +59,138 @@ async function init() {
         const searchBar = document.querySelector('.search_bar');
         const searchIsNull = document.querySelector('.search-null');
         const cardSection = document.querySelector(".card_section");
+        const searchBarInBtn = document.querySelector('.ingredients_input input');
+        const ingredientsList = document.querySelector('.align-list');
+        const tagSection = document.querySelector('.tag_section');
 
+        // Array with found recipes
+        let recipesFound;
+        let ingredientIsSearch = new Set;
+
+        // Filter function letter by letter
         function filtreTexte(arr, requete) {
             return arr.filter(function (el) {
-                return el.toLowerCase().indexOf(requete.toLowerCase()) !== -1;
+                return el.indexOf(requete) !== -1;
             });
-        };        
+        };
 
+        // Show recipes result in page
+        function displayRecipes(){
+            cardSection.innerHTML = "";
+            searchIsNull.style.display = 'none';
+
+            recipesFound.forEach(recipe => {
+                const cardModel = cardFactory(recipe);
+                const CardDOM = cardModel.getCardDOM();
+                cardSection.appendChild(CardDOM);                            
+            });
+        };
+
+        // Search recipes with bar
         searchBar.addEventListener('keyup', function(e){
             let search = searchBar.value;
-
+            
             if(search.length >= 3) {
-                let recipeWithSearch = [];
-                let searchIsFilled = false;
+                recipesFound = new Set;
+                let elementInArray = false;
 
                 recipes.forEach(recipe => {
+                    // Array with names, descriptions and ingredients to help find recipes
                     let recipesName = [recipe.name];
                     let recipesDescription = [recipe.description];
-                    let recipesIngredients = [];
-
+                    let recipesIngredients;
                     recipe.ingredients.forEach(ingredient => {
                         recipesIngredients = [ingredient.ingredient];
                     });
-                    
-                    let ingredientSearch = filtreTexte(recipesIngredients, search);
+
+                    // Filter each name, description, ingredient (letter by letter) to get a result that matches the search bar
                     let nameSearch = filtreTexte(recipesName, search);
                     let descriptionSearch = filtreTexte(recipesDescription, search);
+                    let ingredientSearch = filtreTexte(recipesIngredients, search);
 
-                    function displayRecipes(){
-                        cardSection.innerHTML = "";
-                        searchIsNull.style.display = 'none';
-                        recipeWithSearch.forEach(recipe => {
-                            const cardModel = cardFactory(recipe);
-                            const CardDOM = cardModel.getCardDOM();
-                            cardSection.appendChild(CardDOM);                            
+                    // If any names matches the search ⬇️
+                    if(nameSearch == recipe.name){
+                        recipesFound.add(recipe);
+                        elementInArray = true;
+                    // If any descriptions matches the search ⬇️
+                    }else if(descriptionSearch == recipe.description){
+                        recipesFound.add(recipe);
+                        elementInArray = true;
+                    // If any ingredients matches the search ⬇️
+                    }else{
+                        recipesIngredients.forEach(ingredient => {
+                            if(ingredientSearch == ingredient){
+                                recipesFound.add(recipe);
+                                elementInArray = true;
+                            };
                         });
                     };
-                    
-                    function areThereAnyRecipes(){
-                        if(nameSearch == recipe.name){
-                            recipeWithSearch.push(recipe);
-                            searchIsFilled = true;
-                        }else if(descriptionSearch == recipe.description){
-                            recipeWithSearch.push(recipe);
-                            searchIsFilled = true;
-                        }else{
-                            recipesIngredients.forEach(ingredient => {
-                                if(ingredientSearch == ingredient){
-                                    recipeWithSearch.push(recipe);
-                                    searchIsFilled = true;
-                                };
-                            });
-                        };
 
-                        if(searchIsFilled == true){
-                            displayRecipes()
-                        }else{
-                            cardSection.innerHTML = "";
-                            searchIsNull.style.display = 'flex';
-                        };
-                    }
-                    areThereAnyRecipes()
-
+                    // Show results ⬇️
+                    if(elementInArray == true){
+                        displayRecipes()
+                    // Show error message ⬇️
+                    }else{
+                        cardSection.innerHTML = "";
+                        searchIsNull.style.display = 'flex';
+                    };
                 });
+            // Show original card order ⬇️
             }else{
                 cardSection.innerHTML = "";
                 searchIsNull.style.display = 'none';
                 displayData(recipes);
             };
+        });
+
+        // Search with bar in button
+        searchBarInBtn.addEventListener('keyup', function(e) {
+            let search = searchBarInBtn.value;
+            let ingredientsForDisplay = new Set;
+            let ingredientsArray = [];
+            recipesFound = new Set;
+
+            // Collect all recipe ingredients
+            recipes.forEach(recipe => {
+                recipe.ingredients.forEach(ingredient => {
+                    ingredientsArray.push(ingredient.ingredient.toLowerCase());
+                });
+
+                // Filter each ingredient (letter by letter) to get a result that matches the search bar
+                let recipesSearch = filtreTexte(ingredientsArray, search);
+                console.log(recipesSearch);
+
+                // Add the ingredients (in lowercase) in the "new Set" so as not to have a duplicate
+                recipesSearch.forEach(ingredient => {
+                    ingredientsForDisplay.add(ingredient);                
+                });
+
+                // Reset the ingredient list
+                ingredientsList.innerHTML = '';           
+            
+                ingredientsForDisplay.forEach(ingredient => { 
+                    // Show found ingredients
+                    const a = document.createElement('a');
+                    a.setAttribute('class', 'ingredientOnClick');
+                    a.textContent = ingredient;
+                    ingredientsList.appendChild(a);
+                    
+                    a.addEventListener('click', function(e) {
+                        const tag = document.createElement('div');
+                        const text = document.createElement('p');
+                        const icon = document.createElement('i');
+                                    
+                        tag.setAttribute('class', 'tag blue_tag');
+                        text.setAttribute('class', 'text-tag');
+                        text.textContent = ingredient;
+                        icon.setAttribute('class', 'far fa-times-circle');
+                        
+                        tagSection.appendChild(tag);
+                        tag.appendChild(text);
+                        tag.appendChild(icon);
+                    });
+                }); 
+            });
         });
     };
 
@@ -201,7 +201,7 @@ async function init() {
     // CARDS
     displayData(recipes);
 
-    // SEARCH BAR FILTER
+    // SEARCH
     search(recipes);
 
 };
