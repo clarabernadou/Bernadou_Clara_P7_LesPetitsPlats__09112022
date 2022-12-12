@@ -65,6 +65,7 @@ async function init() {
 
         // Array with found recipes
         let recipesFound;
+        let ingredientIsSearch = new Set;
 
         // Filter function letter by letter
         function filtreTexte(arr, requete) {
@@ -94,7 +95,6 @@ async function init() {
                 let elementInArray = false;
 
                 recipes.forEach(recipe => {
-
                     // Array with names, descriptions and ingredients to help find recipes
                     let recipesName = [recipe.name];
                     let recipesDescription = [recipe.description];
@@ -148,52 +148,48 @@ async function init() {
             let search = searchBarInBtn.value;
             let ingredientsForDisplay = new Set;
             let ingredientsArray = [];
+            recipesFound = new Set;
 
             // Collect all recipe ingredients
             recipes.forEach(recipe => {
                 recipe.ingredients.forEach(ingredient => {
-                    ingredientsArray.push(ingredient.ingredient);
+                    ingredientsArray.push(ingredient.ingredient.toLowerCase());
                 });
-            });
 
-            // Put all the ingredients in lowercase
-            ingredientsArray = ingredientsArray.map(ingredient => {
-                return ingredient.toLowerCase();
-            });
+                // Filter each ingredient (letter by letter) to get a result that matches the search bar
+                let recipesSearch = filtreTexte(ingredientsArray, search);
+                console.log(recipesSearch);
 
-            // Filter each ingredient (letter by letter) to get a result that matches the search bar
-            let recipesSearch = filtreTexte(ingredientsArray, search);
+                // Add the ingredients (in lowercase) in the "new Set" so as not to have a duplicate
+                recipesSearch.forEach(ingredient => {
+                    ingredientsForDisplay.add(ingredient);                
+                });
 
-            // Add the ingredients (in lowercase) in the "new Set" so as not to have a duplicate
-            recipesSearch.forEach(ingredient => {
-                ingredientsForDisplay.add(ingredient);                
-            });
-
-            // Reset the ingredient list
-            ingredientsList.innerHTML = '';           
-
-            ingredientsForDisplay.forEach(ingredient => {
-                // Show found ingredients
-                const a = document.createElement('a');
-                a.setAttribute('class', 'ingredientOnClick');
-                a.textContent = ingredient;
-                ingredientsList.appendChild(a);
-                
-                a.addEventListener('click', function(e) {
-                    const tag = document.createElement('div');
-                    const text = document.createElement('p');
-                    const icon = document.createElement('i');
-                                
-                    tag.setAttribute('class', 'tag blue_tag');
-                    text.setAttribute('class', 'text-tag');
-                    text.textContent = ingredient;
-                    icon.setAttribute('class', 'far fa-times-circle');
+                // Reset the ingredient list
+                ingredientsList.innerHTML = '';           
+            
+                ingredientsForDisplay.forEach(ingredient => { 
+                    // Show found ingredients
+                    const a = document.createElement('a');
+                    a.setAttribute('class', 'ingredientOnClick');
+                    a.textContent = ingredient;
+                    ingredientsList.appendChild(a);
                     
-                    tagSection.appendChild(tag);
-                    tag.appendChild(text);
-                    tag.appendChild(icon);
-                    return(tagSection);  
-                });
+                    a.addEventListener('click', function(e) {
+                        const tag = document.createElement('div');
+                        const text = document.createElement('p');
+                        const icon = document.createElement('i');
+                                    
+                        tag.setAttribute('class', 'tag blue_tag');
+                        text.setAttribute('class', 'text-tag');
+                        text.textContent = ingredient;
+                        icon.setAttribute('class', 'far fa-times-circle');
+                        
+                        tagSection.appendChild(tag);
+                        tag.appendChild(text);
+                        tag.appendChild(icon);
+                    });
+                }); 
             });
         });
     };
