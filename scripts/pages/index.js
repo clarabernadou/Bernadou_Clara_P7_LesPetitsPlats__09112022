@@ -63,10 +63,6 @@ async function init() {
         const ingredientsList = document.querySelector('.align-list');
         const tagSection = document.querySelector('.tag_section');
 
-        // Array with found recipes
-        let recipesFound;
-        let ingredientIsSearch = new Set;
-
         // Filter function letter by letter
         function filtreTexte(arr, requete) {
             return arr.filter(function (el) {
@@ -85,138 +81,151 @@ async function init() {
                 cardSection.appendChild(CardDOM);                            
             });
         };
+    
+        // Display ingredients suggestion
+        function displayIngredients() {
+            ingredientsList.innerHTML = ''; 
 
-        // Search recipes with bar
-        searchBar.addEventListener('keyup', function(e){
-            let search = searchBar.value;
+            ingredientsForDisplay.forEach(ingredient => {
+                const a = document.createElement('a');
+                a.setAttribute('class', 'ingredient-in-list');
+                a.textContent = ingredient
+                ingredientsList.appendChild(a);
+            });
+        }
+
+        // Display tags
+        function displayTag() {
+            const tag = document.createElement('div');
+            const text = document.createElement('p');
+            const icon = document.createElement('i');
+                            
+            tag.setAttribute('class', 'tag blue_tag');
+            text.setAttribute('class', 'text-ingredient-tag');
+            text.textContent = tagContent; 
+            icon.setAttribute('class', 'far fa-times-circle');
             
-            if(search.length >= 3) {
-                recipesFound = new Set;
-                let elementInArray = false;
+            tag.appendChild(text);
+            tag.appendChild(icon);
+            tagSection.appendChild(tag);
+        }
 
-                recipes.forEach(recipe => {
-                    // Array with names, descriptions and ingredients to help find recipes
-                    let recipesName = [recipe.name];
-                    let recipesDescription = [recipe.description];
-                    let recipesIngredients;
-                    recipe.ingredients.forEach(ingredient => {
-                        recipesIngredients = [ingredient.ingredient];
-                    });
+        let search;
+        let ingredientsArray = [];
+        let recipesFound;
+        let ingredientsForDisplay;
+        let elementInArray = false;
+        let tagContent;
 
-                    // Filter each name, description, ingredient (letter by letter) to get a result that matches the search bar
-                    let nameSearch = filtreTexte(recipesName, search);
-                    let descriptionSearch = filtreTexte(recipesDescription, search);
-                    let ingredientSearch = filtreTexte(recipesIngredients, search);
+        function filterByText(recipes) {
+            recipesFound = new Set;
+            ingredientsForDisplay = new Set;
+            recipes.forEach(recipe => {
+                let recipesName = [recipe.name.toLowerCase()];
+                let recipesDescription = [recipe.description.toLowerCase()];
+                recipe.ingredients.forEach(ingredient => {
+                    ingredientsArray.push(ingredient.ingredient.toLowerCase());
+                });
 
-                    // If any names matches the search ⬇️
-                    if(nameSearch == recipe.name){
+                let nameSearch = filtreTexte(recipesName, search);
+                let descriptionSearch = filtreTexte(recipesDescription, search);
+                let ingredientSearch = filtreTexte(ingredientsArray, search);
+
+                ingredientSearch.forEach(ingredient => {
+                    ingredientsForDisplay.add(ingredient);                
+                });
+
+                recipesName.forEach(name => {
+                    if(nameSearch == name){
                         recipesFound.add(recipe);
                         elementInArray = true;
-                    // If any descriptions matches the search ⬇️
-                    }else if(descriptionSearch == recipe.description){
+                    }
+                });
+                recipesDescription.forEach(description => {
+                    if(descriptionSearch == description){
                         recipesFound.add(recipe);
                         elementInArray = true;
-                    // If any ingredients matches the search ⬇️
-                    }else{
-                        recipesIngredients.forEach(ingredient => {
-                            if(ingredientSearch == ingredient){
-                                recipesFound.add(recipe);
-                                elementInArray = true;
-                            };
-                        });
+                    }
+                });
+                ingredientsArray.forEach(ingredient => {
+                    if(ingredientSearch == ingredient){
+                        recipesFound.add(recipe);
+                        elementInArray = true;
                     };
+                });
+            });
+        };
 
-                    // Show results ⬇️
+        function filterByTag(recipes) {
+            recipesFound = new Set;
+            recipes.forEach(recipe => {
+                recipe.ingredients.forEach(ingredient => {
+                    ingredientsArray.push(ingredient.ingredient.toLowerCase());
+                });
+
+                ingredientsArray.forEach(ingredient => {
+                    if(tagContent == ingredient){
+                        recipesFound.add(recipe);
+                        elementInArray = true;
+                    };
+                });
+            });
+            console.log(recipesFound);
+        };
+              
+        function searchWithBar() {
+            searchBar.addEventListener('keyup', function(e){
+                search = searchBar.value;
+                if(search.length >= 3) {
+                    filterByText(recipes);
                     if(elementInArray == true){
                         displayRecipes()
-                    // Show error message ⬇️
                     }else{
                         cardSection.innerHTML = "";
                         searchIsNull.style.display = 'flex';
                     };
-                });
-            // Show original card order ⬇️
-            }else{
-                cardSection.innerHTML = "";
-                searchIsNull.style.display = 'none';
-                displayData(recipes);
-            };
-        });
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-
-        let query = {
-            search : searchBarInBtn.value,
-            ingredientsTags : new Set
+                }else{
+                    cardSection.innerHTML = "";
+                    searchIsNull.style.display = 'none';
+                    displayData(recipes);
+                }
+            });
         }
 
-        searchBarInBtn.addEventListener('keyup', function(e) {
-            let ingredientsForDisplay = new Set;
-            query.search = searchBarInBtn.value
+        function searchWithBtn() {
+            filterByTag(recipes);
+            if(elementInArray == true){
+                displayRecipes();
+            }
+        }
 
-            function findIngredientsCanMatch(query) {
-                let ingredientsArray = [];
-                recipes.forEach(recipe => {
-                    recipe.ingredients.forEach(ingredient => {
-                        ingredientsArray.push(ingredient.ingredient.toLowerCase());
+        function filterIngredients() {
+            searchBarInBtn.addEventListener('keyup', function(e) {
+                search = searchBarInBtn.value;
+                filterByText(recipes)
+                displayIngredients();
+
+                const ingredientsInList = document.querySelectorAll('.ingredient-in-list');
+                for(let ingredientInList of ingredientsInList) {
+                    ingredientInList.addEventListener('click', function(e) {
+                        tagContent = ingredientInList.text
+                        displayTag();
+                        searchWithBtn()
                     });
-                    let recipesSearch = filtreTexte(ingredientsArray, query.search);
-                    recipesSearch.forEach(ingredient => {
-                        ingredientsForDisplay.add(ingredient);                
-                    });
-                });
-            };
-            
-            function ingredientsInSearchList(ingredientsForDisplay) {
-                ingredientsList.innerHTML = ''; 
-                ingredientsForDisplay.forEach(ingredient => {
-                    const a = document.createElement('a');
-                    a.setAttribute('class', 'ingredient-in-list');
-                    a.textContent = ingredient;
-                    ingredientsList.appendChild(a);
-                });
-            };
-            
-            findIngredientsCanMatch(query);
-            ingredientsInSearchList(ingredientsForDisplay)
-
-            const ingredientsInList = document.querySelectorAll('.ingredient-in-list');
-            for(let ingredientInList of ingredientsInList) {
-                ingredientInList.addEventListener('click', function(e) {
-                    query.ingredientsTags.add(ingredientInList.text);
-
-                    function addTagInDOM() {
-                        const tag = document.createElement('div');
-                        const text = document.createElement('p');
-                        const icon = document.createElement('i');
-                                    
-                        tag.setAttribute('class', 'tag blue_tag');
-                        text.setAttribute('class', 'text-tag');
-                        text.textContent = ingredientInList.text;
-                        icon.setAttribute('class', 'far fa-times-circle');
-                        
-                        tagSection.appendChild(tag);
-                        tag.appendChild(text);
-                        tag.appendChild(icon);
-                    }
-                    addTagInDOM();
-                });
-            };
-        });
-
-
+                };
+            });
+        }
+        searchWithBar();
+        filterIngredients();
     };
 
     // BUTTONS
     displayFilterBlueBtn(recipes);
         whenBtnIsClicked();
-
     // CARDS
     displayData(recipes);
-
     // SEARCH
     search(recipes);
 
 };
-    
 init();
