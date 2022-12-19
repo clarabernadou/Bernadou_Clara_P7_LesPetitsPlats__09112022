@@ -192,13 +192,6 @@ async function init() {
             });
         }
 
-        function searchWithBtn() {
-            filterByTag(recipes);
-            if(elementInArray == true){
-                displayRecipes();
-            }
-        }
-
         function filterIngredients() {
             searchBarInBtn.addEventListener('keyup', function(e) {
                 search = searchBarInBtn.value;
@@ -210,7 +203,10 @@ async function init() {
                     ingredientInList.addEventListener('click', function(e) {
                         tagContent = ingredientInList.text
                         displayTag();
-                        searchWithBtn()
+                        filterByTag(recipes);
+                        if(elementInArray == true){
+                            displayRecipes();
+                        }
                     });
                 };
             });
