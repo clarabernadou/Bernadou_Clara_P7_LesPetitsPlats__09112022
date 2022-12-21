@@ -178,19 +178,19 @@ async function init() {
             const removeTags = document.querySelectorAll('.fa-times-circle');
             for(let removeTag of removeTags) {
                 removeTag.addEventListener('click', function(e){
-                    let ingredient = e.target.closest("div").querySelector('p').innerText;
+                    let btn = e.target.closest("div")
+                    let ingredient = btn.querySelector('p').innerText;
                     // let remove = tagsArray.filter(tag => tag == ingredient)
                     let index = tagsArray.findIndex(tag => tag == ingredient)
                     delete tagsArray[index]
+                    btn.remove()
+                    console.log(tagsArray);
                 })
             }
         }
 
         function filterRecipes() {
             extractRecipeIngredients(recipes)
-            recipeIngredients.filter(recipes => {
-                console.log(recipes);
-            })
         }
 
         function initSearchTags() {
