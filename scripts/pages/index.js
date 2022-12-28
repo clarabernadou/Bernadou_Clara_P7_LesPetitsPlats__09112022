@@ -99,7 +99,6 @@ async function init() {
         // Display ingredients suggestion
         function displayIngredients() {
             ingredientsList.innerHTML = '';
-
             ingredientsForDisplay.forEach(ingredient => {
                 const a = document.createElement('a');
                 a.setAttribute('class', 'ingredient-in-list');
@@ -154,6 +153,20 @@ async function init() {
                 }
             })
         };
+
+        function getNewIngredients() {
+            ingredientsForDisplay = new Set
+            extractRecipeIngredients(recipes)
+
+            recipeIngredients.filter(ingredients => {
+                for(let ingredient of ingredients) {
+                    if(ingredient.includes(tagContent)){
+                        ingredientsForDisplay.add(ingredient)
+                    }
+                }
+            console.log(ingredientsForDisplay);
+            })
+        }
               
         function initSearchBar() {
             searchBar.addEventListener('input', function(e){
@@ -189,8 +202,15 @@ async function init() {
             }
         }
 
-        function filterRecipes() {
-            extractRecipeIngredients(recipes)
+        // ⬇️⬇️⬇️ HERE ⬇️⬇️⬇️
+        function filterRecipes(recipes) {
+            extractRecipeIngredients(recipes);
+            recipeIngredients.filter(ingredient => {
+                const multipleExist = tagsArray.every(tags => {
+                    return ingredient.includes(tags);
+                });
+                console.log(multipleExist);
+            })
         }
 
         function initSearchTags() {
@@ -201,7 +221,7 @@ async function init() {
                     tagsArray.push(ingredientInList.text)
                     displayTag()
                     removeTag()
-                    filterRecipes()
+                    filterRecipes(recipes)
                 })
             }
         };
