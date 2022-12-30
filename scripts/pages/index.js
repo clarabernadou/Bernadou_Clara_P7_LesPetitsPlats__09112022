@@ -1,7 +1,7 @@
 import { getRecipes } from '../utils/helper.js';
 import { cardFactory } from '../factories/card.js';
 
-getRecipes()
+getRecipes() // NOTE: Cet appel est inutile tu récupère déjà les recettes dans la fonction init(), en plus ici le résultat n'est pas stocké dans une variable et donc on ne pourrait de toute façon pas l'utiliser
 
 let uniqueIngredients;
 let recipeIngredients;
@@ -11,7 +11,7 @@ function extractIngredients(recipes) {
         return recipe.ingredients.map(i => i.ingredient.toLowerCase())
     })
 
-    uniqueIngredients = [new Set(ingredients.flat())]
+    uniqueIngredients = [new Set(ingredients.flat())] // NOTE: tu mets le résultat de la fonction dans une variable globale, tu pourrais simplement le retourner et ne plus avoir besoin de la variable globale
 };
 
 function extractRecipeIngredients(recipes) {
@@ -23,7 +23,9 @@ function extractRecipeIngredients(recipes) {
 };
 
 
-
+// NOTE: la fonction init() se termine ligne 253, elle contient quasiment tout le code de la page
+// C'est trop long et pourquoi déclarer toutes les fonctions dans le scope de init ?
+// Tu peux déclarer tes fonctions au niveau global et init se contente d'appeler ce qui est nécessaire
 async function init() {
     const { recipes } = await getRecipes();
 
@@ -85,7 +87,7 @@ async function init() {
         const tagSection = document.querySelector('.tag_section');
 
         // Show recipes result in page
-        function displayRecipes(){
+        function displayRecipes(){ // NOTE: ici tu es en train de réécrire la fonction displayData(), il vaudrait mieux la réutiliser
             cardSection.innerHTML = "";
             searchIsNull.style.display = 'none';
 
@@ -128,15 +130,28 @@ async function init() {
         let tagsArray = [];
         let ingredientsForDisplay = new Set
 
+        // NOTE: l'idée selon moi est que cette fonction soit la seule qui permette de filtrer les recettes
+        // Peut importe que le filtre soit initié par un input dans la searchbar, par l'ajout d'un tag ou la suppression d'un tag
+        // A chaque événement c'est cette fonction unique qui est appelée
+        // La fonction doit prendre en compte l'input de la searchbar et les tags pour bien filtrer les recettes
+        // Par simplicité, à chaque fois qu'on veut filtrer les recettes on repart depuis les 50 recettes initiales
         function filterByText(recipes) {
-            let search = searchBar.value
+            let search = searchBar.value // NOTE: cette variable représente l'input de la searchbar
+            let tags = Array.from(document.querySelectorAll(".tags")).map(t => t.textContent) // NOTE: il faut ajouter la liste des tags à prendre en compte, tu peux les lire sur la page directement avec les fonctions du DOM
+            // Attention j'ai écris la ligne comme indication, je n'ai pas écrit quelque chose de fonctionnel
+            // L'idée est de se retrouver avec un array de tags, expl : ["sucre", "oignon"]
+            // Si un tag a été supprimé de la page, il ne sera pas dans mon array de tags, aussi je n'ai plus besoin d'avoir de variable globale pour les tags
+
             recipesFound = recipes.filter(recipe => {
                 const name = recipe.name.toLowerCase()
                 const description = recipe.description.toLowerCase()
-                extractIngredients(recipes)
-                return name.includes(search.toLowerCase()) ||
+                extractIngredients(recipes) // NOTE: si la fonction extractIngredients() retournait la liste des ingrédient pour une recette tu pourrais mettre le résultat dans une variable
+                return (
+                    name.includes(search.toLowerCase()) || // NOTE: ici tu prends en compte l'input de la searchbar, c'est très bien
                     description.includes(search.toLowerCase()) ||
-                        uniqueIngredients.includes(search.toLowerCase())
+                    uniqueIngredients.includes(search.toLowerCase()) || // NOTE: ici la variable uniqueIngredients semble venir de nulle part, c'est en fait une variable globale mais tu peux t'en passer
+                    tags.every(t => uniqueIngredients.includes(t)) // NOTE: j'ajoute une condition pour prendre en compte les tags. Pour chaque tag t, uniqueIngredients contient t. L'idéale serait de remplacer uniqueIngredients par une variable locale
+                )
             })
         };
 
@@ -187,6 +202,7 @@ async function init() {
             })
         };
 
+        // NOTE: Tu as une fonction displayTag() plus haut, essaies de les laisser à côté pour faciliter la lecture
         function removeTag() {
             const removeTags = document.querySelectorAll('.fa-times-circle');
             for(let removeTag of removeTags) {
@@ -195,7 +211,7 @@ async function init() {
                     let ingredient = btn.querySelector('p').innerText;
                     // let remove = tagsArray.filter(tag => tag == ingredient)
                     let index = tagsArray.findIndex(tag => tag == ingredient)
-                    delete tagsArray[index]
+                    delete tagsArray[index] // NOTE: l'idée ici serait de uniquement supprimer le tag du DOM et de ne pas chercher à modifier l'état d'une variable globale
                     btn.remove()
                     console.log(tagsArray);
                 })
