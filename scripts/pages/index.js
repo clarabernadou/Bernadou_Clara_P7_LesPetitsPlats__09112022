@@ -2,11 +2,10 @@ import { getRecipes } from '../utils/helper.js';
 import { cardFactory } from '../factories/card.js';
 
 const { recipes } = await getRecipes();
-console.log(recipes);
 
 function extractAllIngredients(recipes) {
     let ingredients = recipes.map(recipe => {
-        return recipe.ingredients.map(i => i.toLowerCase());
+        return recipe.ingredients.map(i => i.toLowerCase())
     })
     return [new Set(ingredients.flat())]
 };
@@ -15,8 +14,6 @@ export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
-/* --------------------------------------------------------- FILTERS --------------------------------------------------------- */
-
 async function displayFilterBlueBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
@@ -24,7 +21,6 @@ async function displayFilterBlueBtn(recipes){
     filterSection.appendChild(CardDOM);       
 };
 
-// WHEN CLICK ON BUTTON
 function whenBtnIsClicked(){
     const button = document.querySelector('.ingredients_button');
     const searchBtn = document.querySelector('.ingredients_input');
@@ -50,8 +46,6 @@ function whenBtnIsClicked(){
     });
 };
 
-/* --------------------------------------------------------- RECIPE CARDS --------------------------------------------------------- */
-
 async function displayData(recipes) {
     const cardSection = document.querySelector(".card_section");
     recipes.forEach((recipe) => {
@@ -61,8 +55,6 @@ async function displayData(recipes) {
     });
 };
 
-/* ------------------------------------------------------------ SEARCH ------------------------------------------------------------ */
-
 function search(recipes) {
     const searchBar = document.querySelector('.search_bar');
     const searchIsNull = document.querySelector('.search-null');
@@ -70,17 +62,6 @@ function search(recipes) {
     const searchBarInBtn = document.querySelector('.ingredients_input input');
     const ingredientsList = document.querySelector('.align-list');
     const tagSection = document.querySelector('.tag_section');
-    
-    // Display ingredients suggestion
-    function displayIngredients() {
-        ingredientsList.innerHTML = '';
-        ingredientsForDisplay.forEach(ingredient => {
-            const a = document.createElement('a');
-            a.setAttribute('class', 'ingredient-in-list');
-            a.textContent = ingredient
-            ingredientsList.appendChild(a);
-        });
-    };
 
     // Display tags
     function displayTag() {
@@ -97,7 +78,7 @@ function search(recipes) {
         tag.appendChild(icon);
         tagSection.appendChild(tag);
 
-        filterByText(recipes)
+        initAllSearch()
         cardSection.innerHTML = "";
         displayData(recipesFound)
     };
@@ -108,7 +89,7 @@ function search(recipes) {
             removeTag.addEventListener('click', function(e){
                 let btn = e.target.closest("div")
                 btn.remove()
-                filterByText(recipes)
+                initAllSearch()
                 cardSection.innerHTML = "";
                 displayData(recipesFound)
             })
@@ -116,18 +97,12 @@ function search(recipes) {
     }
     
     let tagContent;
-    let ingredientsForDisplay = new Set
     let recipesFound
+    let ingredientsForDisplay = new Set
 
-    // NOTE: l'idée selon moi est que cette fonction soit la seule qui permette de filtrer les recettes
-    // Peut importe que le filtre soit initié par un input dans la searchbar, par l'ajout d'un tag ou la suppression d'un tag
-    // A chaque événement c'est cette fonction unique qui est appelée
-    // La fonction doit prendre en compte l'input de la searchbar et les tags pour bien filtrer les recettes
-    // Par simplicité, à chaque fois qu'on veut filtrer les recettes on repart depuis les 50 recettes initiales
-    function filterByText(recipes) {
+    function filterRecipes(recipes) {
         let search = searchBar.value
         let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent)
-        console.log(tags);
 
         recipesFound = recipes.filter(recipe => {
             const name = recipe.name.toLowerCase()
@@ -144,15 +119,14 @@ function search(recipes) {
                 return tags.every(t => recipe.ingredients.includes(t))
             })
         }
-
-        console.log(recipesFound);
         return recipesFound
     };
 
-    function getIngredients() {
+    function ingredientsTags() {
         let search = searchBarInBtn.value
+        let recipesFound = filterRecipes(recipes)
+        let uniqueIngredients = extractAllIngredients(recipesFound)
         ingredientsForDisplay = new Set
-        let uniqueIngredients = extractAllIngredients(recipes)
 
         uniqueIngredients.filter(ingredients => {
             for(let ingredient of ingredients) {
@@ -161,17 +135,28 @@ function search(recipes) {
                 }
             }
         })
+    }
+    
+    function displayIngredients() {
+        ingredientsList.innerHTML = '';
+        ingredientsForDisplay.forEach(ingredient => {
+            const a = document.createElement('a');
+            a.setAttribute('class', 'ingredient-in-list');
+            a.textContent = ingredient
+            ingredientsList.appendChild(a);
+        });
     };
               
     function initSearchBar() {
         searchBar.addEventListener('input', function(e){
             let search = searchBar.value;
-            let recipesFound = filterByText(recipes)
+            let recipesFound = filterRecipes(recipes)
 
             if(search.length >= 3) {
-                filterByText(recipes)
-                if(recipesFound.length > 0){
+                initAllSearch()
+                if(recipesFound.length){
                     cardSection.innerHTML = "";
+                    searchIsNull.style.display = 'none';
                     displayData(recipesFound)
                 }else{
                     cardSection.innerHTML = "";
@@ -196,12 +181,19 @@ function search(recipes) {
         }
     };
 
+    function initAllSearch() {
+        filterRecipes(recipes)
+        ingredientsTags()
+        displayIngredients()
+        initSearchTags()      
+    }
+
     function filterIngredients() {
-        getIngredients()
+        ingredientsTags()
         displayIngredients()
         initSearchTags()
         searchBarInBtn.addEventListener('input', function(e) {
-            getIngredients()
+            ingredientsTags()
             displayIngredients()
             initSearchTags()
         })
