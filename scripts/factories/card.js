@@ -1,3 +1,7 @@
+import { getRecipes } from '../utils/helper.js';
+
+const { recipes } = await getRecipes();
+
 export function cardFactory(data) {
     const { id, name, servings, ingredients, time, description, appliance, ustensils } = data;
     
@@ -26,15 +30,15 @@ export function cardFactory(data) {
         // Main card content
         main.setAttribute('class', 'card_content card_main');
 
-        for(let i = 0; i < id; i ++){
+        recipes.filter(recipe => {
             var text = new Array();
-            ingredients.forEach(element => {
-                let all = `${element.ingredient}: ${element.quantity} ${element.unit}\n`;
+            recipe.ingredients.filter(ingredient => {
+                let all = `${ingredient.ingredient}: ${ingredient.quantity} ${ingredient.unit}\n`;
                 all = all.replace(/undefined/g, "");
                 text.push(all)
-                ingredientsList.textContent = text.join('');
-            });            
-        };
+                ingredientsList.textContent = text.join('');              
+            })
+        })
 
         description.textContent = data.description;
 
