@@ -1,8 +1,11 @@
+// Import functions
 import { getRecipes } from '../utils/helper.js';
 import { cardFactory } from '../factories/card.js';
 
+// Get the recipes
 const { recipes } = await getRecipes();
 
+// Extract all ingredients from recipes
 function extractAllIngredients(recipes) {
     let ingredients = recipes.map(recipe => {
         return recipe.ingredients.map(i => i.toLowerCase())
@@ -10,24 +13,27 @@ function extractAllIngredients(recipes) {
     return [new Set(ingredients.flat())]
 };
 
+// Extract the ingredients of a recipe
 export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
-async function displayFilterBlueBtn(recipes){
+// Add blue button in the DOM
+async function displayBlueBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
     const CardDOM = cardModel.blueBtn();
     filterSection.appendChild(CardDOM);       
 };
 
-function whenBtnIsClicked(){
+function transformTheButton(){
     const button = document.querySelector('.ingredients_button');
     const searchBtn = document.querySelector('.ingredients_input');
     const buttonIconDown = document.querySelector('.ingredients_button .fa-chevron-down');
     const inputIconUp = document.querySelector('.ingredients_input .fa-chevron-up');
     const openSearchBarBtn = document.querySelector('.ingredients_button h2');
 
+    // Display search button
     openSearchBarBtn.addEventListener('click', function(e){
         searchBtn.style.display = 'flex';
         button.style.display = 'none';
@@ -46,6 +52,7 @@ function whenBtnIsClicked(){
     });
 };
 
+// Display recipe cards in the DOM
 async function displayData(recipes) {
     const cardSection = document.querySelector(".card_section");
     recipes.forEach((recipe) => {
@@ -63,7 +70,7 @@ function search(recipes) {
     const ingredientsList = document.querySelector('.align-list');
     const tagSection = document.querySelector('.tag_section');
 
-    // Display tags
+    // Add a tag in the DOM
     function displayTag() {
         const tag = document.createElement('div');
         const text = document.createElement('p');
@@ -83,6 +90,7 @@ function search(recipes) {
         displayData(recipesFound)
     };
 
+    // Delete the tag in the DOM
     function removeTag() {
         const removeTags = document.querySelectorAll('.fa-times-circle');
         for(let removeTag of removeTags) {
@@ -96,14 +104,15 @@ function search(recipes) {
         }
     }
     
-    let tagContent;
-    let recipesFound
-    let ingredientsForDisplay = new Set
+    let tagContent // The name of the ingredient that will be in the tag
+    let recipesFound // Recipes found after a search
+    let ingredientsForDisplay = new Set // The list of ingredients to add tags
 
     function filterRecipes(recipes) {
         let search = searchBar.value
         let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent)
 
+        // Filter recipes with the search bar
         recipesFound = recipes.filter(recipe => {
             const name = recipe.name.toLowerCase()
             const description = recipe.description.toLowerCase()
@@ -114,14 +123,17 @@ function search(recipes) {
             )
         })
 
+        // Filter recipes with tags
         if(tags.length){
             recipesFound = recipesFound.filter(recipe => {
                 return tags.every(t => recipe.ingredients.includes(t))
             })
         }
-        return recipesFound
+
+        return recipesFound // Return a array of filtered recipes
     };
 
+    // Add in a array the ingredients to add tags
     function ingredientsTags() {
         let search = searchBarInBtn.value
         let recipesFound = filterRecipes(recipes)
@@ -137,6 +149,7 @@ function search(recipes) {
         })
     }
     
+    // Display an ingredient for tags in the DOM
     function displayIngredients() {
         ingredientsList.innerHTML = '';
         ingredientsForDisplay.forEach(ingredient => {
@@ -146,14 +159,17 @@ function search(recipes) {
             ingredientsList.appendChild(a);
         });
     };
-              
+
+    // Init the search with the search bar
     function initSearchBar() {
         searchBar.addEventListener('input', function(e){
             let search = searchBar.value;
             let recipesFound = filterRecipes(recipes)
 
+            // If the search bar contains more than 3 characters
             if(search.length >= 3) {
                 initAllSearch()
+                // If there are recipes found after the search
                 if(recipesFound.length){
                     cardSection.innerHTML = "";
                     searchIsNull.style.display = 'none';
@@ -170,44 +186,44 @@ function search(recipes) {
         })
     };
 
+    // Init the search with the tags
     function initSearchTags() {
         const ingredientsInList = document.querySelectorAll('.ingredient-in-list');
         for(let ingredientInList of ingredientsInList) {
             ingredientInList.addEventListener('click', function(e){
-                tagContent = ingredientInList.text
-                displayTag()
-                removeTag()
+                tagContent = ingredientInList.text // Add the ingredient name to the tag
+                displayTag() // Add a tag in the DOM
+                removeTag() // Delete the tag in the DOM
             })
         }
     };
-
+    
     function initAllSearch() {
-        filterRecipes(recipes)
-        ingredientsTags()
-        displayIngredients()
-        initSearchTags()      
+        filterRecipes(recipes) // Filter the recipes
+        ingredientsTags() // modify the list of ingredients for the tags
+        displayIngredients() // display it
+        initSearchTags() // launch the search
     }
 
     function filterIngredients() {
-        ingredientsTags()
-        displayIngredients()
-        initSearchTags()
+        ingredientsTags() // modify the list of ingredients for the tags
+        displayIngredients() // display it
+        initSearchTags() // launch the search
         searchBarInBtn.addEventListener('input', function(e) {
             ingredientsTags()
             displayIngredients()
             initSearchTags()
         })
     };
-
+    
     initSearchBar();
     filterIngredients();
 };
 
 async function init() {
-    displayFilterBlueBtn(recipes);
-    whenBtnIsClicked();
+    displayBlueBtn(recipes);
+    transformTheButton();
     displayData(recipes);
     search(recipes);
-
 };
 init();
