@@ -6,7 +6,7 @@ console.log(recipes);
 
 function extractAllIngredients(recipes) {
     let ingredients = recipes.map(recipe => {
-        return recipe.ingredients.map(i => i.toLowerCase())
+        return recipe.ingredients.map(i => i.toLowerCase());
     })
     return [new Set(ingredients.flat())]
 };
