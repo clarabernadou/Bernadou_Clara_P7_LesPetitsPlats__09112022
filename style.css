@@ -127,7 +127,7 @@ button h2 {
     background-color: #3282F7;
 }
 
-.appliance {
+.appliances {
     background-color: #68D9A4;
 }
 
@@ -136,22 +136,22 @@ button h2 {
 }
 
 .ingredients_button,
-.appliance_button,
+.appliances_button,
 .ustensils_button {
     width: 170px;
 }
 
 .ingredients_input,
-.appliance_input,
+.appliances_input,
 .ustensils_input {
-    width: 110%;
+    width: 100%;
 }
 
 .ingredients_input,
-.appliance_input,
+.appliances_input,
 .ustensils_input,
 .ingredients_list,
-.appliance_list,
+.appliances_list,
 .ustensils_list {
     display: flex;
     flex-direction: column;
@@ -163,7 +163,7 @@ button h2 {
 }
 
 .ingredients_list,
-.appliance_list,
+.appliances_list,
 .ustensils_list {
     width: 667px;
 }
@@ -176,16 +176,16 @@ button h2 {
 }
 
 .ingredients_input,
-.appliance_input,
+.appliances_input,
 .ustensils_input,
 .ingredients_list,
-.appliance_list,
+.appliances_list,
 .ustensils_list {
     display: none;
 }
 
-.align-list,
-.align-search-list {
+.align-ingredients-list,
+.align-appliances-list {
     display: flex;
     flex-direction: column;
     text-align: start;
@@ -288,7 +288,7 @@ button h2 {
     }
     
     .ingredients_list,
-    .appliance_list,
+    .appliances_list,
     .ustensils_list {
         width: 400px;
     }
@@ -315,7 +315,7 @@ button h2 {
     }
     
     .ingredients_list,
-    .appliance_list,
+    .appliances_list,
     .ustensils_list {
         width: 550px;
     }

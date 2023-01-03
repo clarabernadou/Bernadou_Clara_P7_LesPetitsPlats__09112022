@@ -5,6 +5,8 @@ import { cardFactory } from '../factories/card.js';
 // Get the recipes
 const { recipes } = await getRecipes();
 
+// ------------------------------------------------------------------------------------------------------------------
+
 // Extract all ingredients from recipes
 function extractAllIngredients(recipes) {
     let ingredients = recipes.map(recipe => {
@@ -18,15 +20,37 @@ export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
+function extractAllAppliances(recipes) {
+    let appliances = recipes.map(recipe => {
+        return recipe.appliance.toLowerCase()
+    })
+    return [new Set(appliances.flat())]
+};
+
+function extractAppliances(recipe) {
+    return recipe.appliance.toLowerCase()
+}
+
+// ------------------------------------------------------------------------------------------------------------------
+
 // Add blue button in the DOM
-async function displayBlueBtn(recipes){
+async function displayFilterBlueBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
     const CardDOM = cardModel.blueBtn();
     filterSection.appendChild(CardDOM);       
 };
 
-function transformTheButton(){
+async function displayFilterGreenBtn(recipes){
+    const filterSection = document.querySelector(".filter_section");
+    const cardModel = cardFactory(recipes);
+    const CardDOM = cardModel.greenBtn();
+    filterSection.appendChild(CardDOM);       
+};
+
+// ------------------------------------------------------------------------------------------------------------------
+
+function ingredientsFilter(){
     const button = document.querySelector('.ingredients_button');
     const searchBtn = document.querySelector('.ingredients_input');
     const buttonIconDown = document.querySelector('.ingredients_button .fa-chevron-down');
@@ -52,6 +76,33 @@ function transformTheButton(){
     });
 };
 
+function appliancesFilter(){
+    const button = document.querySelector('.appliances_button');
+    const searchBtn = document.querySelector('.appliances_input');
+    const buttonIconDown = document.querySelector('.appliances_button .fa-chevron-down');
+    const inputIconUp = document.querySelector('.appliances_input .fa-chevron-up');
+    const openSearchBarBtn = document.querySelector('.appliances_button h2');
+
+    openSearchBarBtn.addEventListener('click', function(e){
+        searchBtn.style.display = 'flex';
+        button.style.display = 'none';
+    });
+
+    // Display search button
+    buttonIconDown.addEventListener('click', function(e){
+        searchBtn.style.display = 'flex';
+        button.style.display = 'none';
+    });
+
+    // Return main button
+    inputIconUp.addEventListener('click', function(e){
+        button.style.display = 'flex';
+        searchBtn.style.display = 'none';
+    });
+};
+
+// ------------------------------------------------------------------------------------------------------------------
+
 // Display recipe cards in the DOM
 async function displayData(recipes) {
     const cardSection = document.querySelector(".card_section");
@@ -66,8 +117,13 @@ function search(recipes) {
     const searchBar = document.querySelector('.search_bar');
     const searchIsNull = document.querySelector('.search-null');
     const cardSection = document.querySelector(".card_section");
+
     const searchBarInBtn = document.querySelector('.ingredients_input input');
-    const ingredientsList = document.querySelector('.align-list');
+    const searchBarInAppliancesBtn = document.querySelector('.appliances_search_input');
+
+    const ingredientsList = document.querySelector('.align-ingredients-list');
+    const appliancesList = document.querySelector('.align-appliances-list');
+
     const tagSection = document.querySelector('.tag_section');
 
     // Add a tag in the DOM
@@ -107,6 +163,7 @@ function search(recipes) {
     let tagContent // The name of the ingredient that will be in the tag
     let recipesFound // Recipes found after a search
     let ingredientsForDisplay = new Set // The list of ingredients to add tags
+    let appliancesForDisplay = new Set
     let tags
 
     function filterRecipes(recipes) {
@@ -127,15 +184,19 @@ function search(recipes) {
         // Filter recipes with tags
         if(tags.length){
             recipesFound = recipesFound.filter(recipe => {
-                return tags.every(t => recipe.ingredients.includes(t))
+                return (
+                    tags.every(t => recipe.ingredients.includes(t)) ||
+                    tags.every(t => recipe.appliance.toLowerCase().includes(t))
+                )
             })
         }
-
         return recipesFound // Return a array of filtered recipes
     };
 
+// ------------------------------------------------------------------------------------------------------------------
+
     // Add in a array the ingredients to add tags
-    function ingredientsTags() {
+    function getIngredients() {
         let search = searchBarInBtn.value
         let recipesFound = filterRecipes(recipes)
         let uniqueIngredients = extractAllIngredients(recipesFound)
@@ -158,8 +219,37 @@ function search(recipes) {
             a.setAttribute('class', 'ingredient-in-list');
             a.textContent = ingredient
             ingredientsList.appendChild(a);
-        });
-    };
+        })
+    }
+
+// ------------------------------------------------------------------------------------------------------------------
+
+    function getAppliances() {
+        let search = searchBarInAppliancesBtn.value
+        let recipesFound = filterRecipes(recipes)
+        let uniqueAppliances = extractAllAppliances(recipesFound)
+        appliancesForDisplay = new Set
+
+        uniqueAppliances.filter(appliances => {
+            for(let appliance of appliances) {
+                if(appliance.includes(search.toLowerCase())) {
+                    appliancesForDisplay.add(appliance);
+                }
+            }
+        })
+    }
+
+    function displayAppliances() {
+        appliancesList.innerHTML = '';
+        appliancesForDisplay.forEach(ustensil => {
+            const a = document.createElement('a');
+            a.setAttribute('class', 'appliances-in-list');
+            a.textContent = ustensil
+            appliancesList.appendChild(a);
+        })
+    }
+
+// ------------------------------------------------------------------------------------------------------------------
 
     // Init the search with the search bar
     function initSearchBar() {
@@ -191,6 +281,8 @@ function search(recipes) {
         })
     };
 
+// ------------------------------------------------------------------------------------------------------------------
+
     // Init the search with the tags
     function initSearchTags() {
         const ingredientsInList = document.querySelectorAll('.ingredient-in-list');
@@ -202,22 +294,53 @@ function search(recipes) {
             })
         }
     };
+
+    function initAppliancesSearchTags() {
+        const appliancesInList = document.querySelectorAll('.appliances-in-list');
+        for(let applianceInList of appliancesInList) {
+            applianceInList.addEventListener('click', function(e){
+                tagContent = applianceInList.text
+                displayTag()
+                removeTag()
+            })
+        }
+    };
+
+// ------------------------------------------------------------------------------------------------------------------
     
     function initAllSearch() {
         filterRecipes(recipes) // Filter the recipes
-        ingredientsTags() // modify the list of ingredients for the tags
+
+        // INGREDIENTS
+        getIngredients() // modify the list of ingredients for the tags
         displayIngredients() // display it
         initSearchTags() // launch the search
+
+        // APPLIANCES
+        getAppliances()
+        displayAppliances()
+        initAppliancesSearchTags()
     }
 
     function filterIngredients() {
-        ingredientsTags() // modify the list of ingredients for the tags
+        // INGREDIENTS
+        getIngredients() // modify the list of ingredients for the tags
         displayIngredients() // display it
-        initSearchTags() // launch the search
+        initSearchTags() // launch the Search
         searchBarInBtn.addEventListener('input', function(e) {
-            ingredientsTags()
+            getIngredients()
             displayIngredients()
             initSearchTags()
+        })
+
+        // APPLIANCES
+        getAppliances()
+        displayAppliances()
+        initAppliancesSearchTags()
+        searchBarInAppliancesBtn.addEventListener('input', function(e){
+            getAppliances()
+            displayAppliances()
+            initAppliancesSearchTags()
         })
     };
     
@@ -226,8 +349,10 @@ function search(recipes) {
 };
 
 async function init() {
-    displayBlueBtn(recipes);
-    transformTheButton();
+    displayFilterBlueBtn(recipes);
+        ingredientsFilter();
+    displayFilterGreenBtn(recipes);
+        appliancesFilter();
     displayData(recipes);
     search(recipes);
 };
