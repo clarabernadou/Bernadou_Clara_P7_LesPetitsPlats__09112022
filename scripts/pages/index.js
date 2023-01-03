@@ -107,10 +107,11 @@ function search(recipes) {
     let tagContent // The name of the ingredient that will be in the tag
     let recipesFound // Recipes found after a search
     let ingredientsForDisplay = new Set // The list of ingredients to add tags
+    let tags
 
     function filterRecipes(recipes) {
         let search = searchBar.value
-        let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent)
+        tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent)
 
         // Filter recipes with the search bar
         recipesFound = recipes.filter(recipe => {
@@ -178,6 +179,10 @@ function search(recipes) {
                     cardSection.innerHTML = "";
                     searchIsNull.style.display = 'flex';
                 }
+            }else if(tags.length){
+                cardSection.innerHTML = "";
+                searchIsNull.style.display = 'none';
+                displayData(recipesFound)
             }else{
                 cardSection.innerHTML = "";
                 searchIsNull.style.display = 'none';
