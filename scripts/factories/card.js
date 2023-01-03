@@ -83,7 +83,50 @@ export function cardFactory(data) {
             alignBtn.setAttribute('class', 'align-inside-btn');
             iconUp.setAttribute('class', 'fas fa-chevron-up');
             input.setAttribute('placeholder', "Rechercher un ingrédient");
-            alignSearchList.setAttribute('class', 'align-list align-search-list');
+            alignSearchList.setAttribute('class', 'align-ingredients-list');
+
+        // Display in page
+        container.appendChild(button)
+        button.appendChild(title);
+        button.appendChild(iconDown);
+        container.appendChild(containerDisplayNone);
+        containerDisplayNone.appendChild(inputBtn);
+        inputBtn.appendChild(alignBtn);
+        alignBtn.appendChild(input);
+        alignBtn.appendChild(iconUp);
+        inputBtn.appendChild(alignSearchList);
+        return (container);
+    }
+
+    function greenBtn(){
+        const container = document.createElement('div');
+        const button = document.createElement('button');
+        const title = document.createElement('h2');
+        const iconDown = document.createElement('i');
+        
+        const containerDisplayNone = document.createElement('div');
+        const inputBtn = document.createElement('button');
+        const input = document.createElement('input');
+        const iconUp = document.createElement('i');
+        const alignBtn = document.createElement('div');
+        const alignSearchList = document.createElement('div');
+
+        // Container
+        container.setAttribute('class', 'container')        
+            // Main button
+            button.setAttribute('class', 'appliances appliances_button');
+            title.textContent = "Appareils";
+            iconDown.setAttribute('class', 'fas fa-chevron-down');  
+            // Container for buttons
+            containerDisplayNone.setAttribute('class', 'container_display_none');
+
+            // Search bar
+            inputBtn.setAttribute('class', 'appliances appliances_input');
+            alignBtn.setAttribute('class', 'align-inside-btn');
+            iconUp.setAttribute('class', 'fas fa-chevron-up');
+            input.setAttribute('placeholder', "Rechercher un appareil");
+            input.setAttribute('class', 'appliances_search_input');
+            alignSearchList.setAttribute('class', 'align-appliances-list');
 
         // Display in page
         container.appendChild(button)
@@ -112,5 +155,5 @@ export function cardFactory(data) {
         return(tag)
     }
 
-    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, blueBtn, tag }
+    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, blueBtn, greenBtn, tag }
 }
