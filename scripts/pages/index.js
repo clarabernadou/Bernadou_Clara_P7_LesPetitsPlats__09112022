@@ -27,9 +27,7 @@ function extractAllAppliances(recipes) {
     return [new Set(appliances.flat())]
 };
 
-function extractAppliances(recipe) {
-    return recipe.appliance.toLowerCase()
-}
+
 
 // ------------------------------------------------------------------------------------------------------------------
 
@@ -133,6 +131,7 @@ function search(recipes) {
         const icon = document.createElement('i');
                             
         tag.setAttribute('class', 'tag blue_tag');
+        tag.style.backgroundColor = tagColor;
         text.setAttribute('class', 'text-ingredient-tag');
         text.textContent = tagContent; 
         icon.setAttribute('class', 'far fa-times-circle');
@@ -161,6 +160,7 @@ function search(recipes) {
     }
     
     let tagContent // The name of the ingredient that will be in the tag
+    let tagColor
     let recipesFound // Recipes found after a search
     let ingredientsForDisplay = new Set // The list of ingredients to add tags
     let appliancesForDisplay = new Set
@@ -190,6 +190,7 @@ function search(recipes) {
                 )
             })
         }
+        console.log(recipesFound);
         return recipesFound // Return a array of filtered recipes
     };
 
@@ -289,8 +290,9 @@ function search(recipes) {
         for(let ingredientInList of ingredientsInList) {
             ingredientInList.addEventListener('click', function(e){
                 tagContent = ingredientInList.text // Add the ingredient name to the tag
-                displayTag() // Add a tag in the DOM
-                removeTag() // Delete the tag in the DOM
+                tagColor = '#3282F7';
+                displayTag()
+                removeTag()
             })
         }
     };
@@ -300,6 +302,7 @@ function search(recipes) {
         for(let applianceInList of appliancesInList) {
             applianceInList.addEventListener('click', function(e){
                 tagContent = applianceInList.text
+                tagColor = '#68D9A4';
                 displayTag()
                 removeTag()
             })

@@ -71,18 +71,6 @@ body {
     width: 100%;
 }
 
-.blue_tag {
-    background: #3282F7;
-}
-
-.green_tag {
-    background: #68D9A4;
-}
-
-.red_tag {
-    background: #ED6454;
-}
-
 /* FILTERS */
 
 .filter_section {
@@ -111,7 +99,7 @@ body {
     color: white;
     font-size: 18px;
     font-family: 'Lato';
-    width: 100%;
+    width: 30em;
     height: 50px;
 }
 
