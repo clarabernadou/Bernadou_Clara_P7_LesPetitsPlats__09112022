@@ -5,20 +5,14 @@ import { cardFactory } from '../factories/card.js';
 // Get the recipes
 const { recipes } = await getRecipes();
 
-// ------------------------------------------------------------------------------------------------------------------
+// ⬇ Extract all elements from recipes ⬇
 
-// Extract all ingredients from recipes
 function extractAllIngredients(recipes) {
     let ingredients = recipes.map(recipe => {
         return recipe.ingredients.map(i => i.toLowerCase())
     })
     return [new Set(ingredients.flat())]
 };
-
-// Extract the ingredients of a recipe
-export function extractIngredients(recipe) {
-    return recipe.ingredients.map(i => i.ingredient.toLowerCase())
-}
 
 function extractAllAppliances(recipes) {
     let appliances = recipes.map(recipe => {
@@ -33,13 +27,19 @@ function extractAllUstensils(recipes) {
     })
     return [new Set(ustensils.flat())]
 };
+// ------------------------------------------------------------
+// ⬇ Extract the elements of a recipe ⬇
+
+export function extractIngredients(recipe) {
+    return recipe.ingredients.map(i => i.ingredient.toLowerCase())
+}
 
 export function extractUstensils(recipe) {
     return recipe.ustensils.map(u => u.toLowerCase())
 }
-// ------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------
+// ⬇ Add blue button in the DOM ⬇
 
-// Add blue button in the DOM
 async function displayFilterBlueBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
@@ -60,8 +60,7 @@ async function displayFilterRedBtn(recipes){
     const CardDOM = cardModel.redBtn();
     filterSection.appendChild(CardDOM);       
 };
-
-// ------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------
 
 function ingredientsFilter(){
     const button = document.querySelector('.ingredients_button');
@@ -70,19 +69,19 @@ function ingredientsFilter(){
     const inputIconUp = document.querySelector('.ingredients_input .fa-chevron-up');
     const openSearchBarBtn = document.querySelector('.ingredients_button h2');
 
-    // Display search button
+    // ⬇ Display search button ⬇
     openSearchBarBtn.addEventListener('click', function(e){
         searchBtn.style.display = 'flex';
         button.style.display = 'none';
     });
 
-    // Display search button
+    // ⬇ Display search button ⬇
     buttonIconDown.addEventListener('click', function(e){
         searchBtn.style.display = 'flex';
         button.style.display = 'none';
     });
 
-    // Return main button
+    // ⬇ Return main button ⬇
     inputIconUp.addEventListener('click', function(e){
         button.style.display = 'flex';
         searchBtn.style.display = 'none';
@@ -101,13 +100,13 @@ function appliancesFilter(){
         button.style.display = 'none';
     });
 
-    // Display search button
+    // ⬇ Display search button ⬇
     buttonIconDown.addEventListener('click', function(e){
         searchBtn.style.display = 'flex';
         button.style.display = 'none';
     });
 
-    // Return main button
+    // ⬇ Return main button ⬇
     inputIconUp.addEventListener('click', function(e){
         button.style.display = 'flex';
         searchBtn.style.display = 'none';
@@ -126,13 +125,13 @@ function ustensilsFilter(){
         button.style.display = 'none';
     });
 
-    // Display search button
+    // ⬇ Display search button ⬇
     buttonIconDown.addEventListener('click', function(e){
         searchBtn.style.display = 'flex';
         button.style.display = 'none';
     });
 
-    // Return main button
+    // ⬇ Return main button ⬇
     inputIconUp.addEventListener('click', function(e){
         button.style.display = 'flex';
         searchBtn.style.display = 'none';
@@ -141,7 +140,7 @@ function ustensilsFilter(){
 
 // ------------------------------------------------------------------------------------------------------------------
 
-// Display recipe cards in the DOM
+// ⬇ Display recipe cards in the DOM ⬇
 async function displayData(recipes) {
     const cardSection = document.querySelector(".card_section");
     recipes.forEach((recipe) => {
@@ -166,7 +165,7 @@ function search(recipes) {
 
     const tagSection = document.querySelector('.tag_section');
 
-    // Add a tag in the DOM
+    // ⬇ Add a tag in the DOM ⬇
     function displayTag() {
         const tag = document.createElement('div');
         const text = document.createElement('p');
@@ -187,7 +186,7 @@ function search(recipes) {
         displayData(recipesFound)
     };
 
-    // Delete the tag in the DOM
+    // ⬇ Delete the tag in the DOM ⬇
     function removeTag() {
         const removeTags = document.querySelectorAll('.fa-times-circle');
         for(let removeTag of removeTags) {
@@ -201,19 +200,21 @@ function search(recipes) {
         }
     }
     
-    let tagContent // The name of the ingredient that will be in the tag
-    let tagColor
-    let recipesFound // Recipes found after a search
-    let ingredientsForDisplay = new Set // The list of ingredients to add tags
-    let appliancesForDisplay = new Set
-    let ustensilsForDisplay = new Set
-    let tags
+    let tagContent // ⬅ The name of the ingredient that will be in the tag
+    let tagColor // ⬅ To add a color to the tag
+    let recipesFound // ⬅ Recipes found after a search
+
+    let ingredientsForDisplay = new Set // ⬅ The list of ingredients to add tags
+    let appliancesForDisplay = new Set // ⬅ The list of appliances to add tags
+    let ustensilsForDisplay = new Set // ⬅ The list of ustensils to add tags
+
+    let tags // ⬅ To get a array of tags
 
     function filterRecipes(recipes) {
         let search = searchBar.value
         tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent)
 
-        // Filter recipes with the search bar
+        // ⬇ Filter recipes with the search bar ⬇
         recipesFound = recipes.filter(recipe => {
             const name = recipe.name.toLowerCase()
             const description = recipe.description.toLowerCase()
@@ -224,7 +225,7 @@ function search(recipes) {
             )
         })
 
-        // Filter recipes with tags
+        // ⬇ Filter recipes with tags ⬇
         if(tags.length){
             recipesFound = recipesFound.filter(recipe => {
                 let ustensils = extractUstensils(recipe)
@@ -236,12 +237,12 @@ function search(recipes) {
             })
         }
         console.log(recipesFound);
-        return recipesFound // Return a array of filtered recipes
+        return recipesFound // ⬅ Return a array of filtered recipes
     };
 
 // ------------------------------------------------------------------------------------------------------------------
 
-    // Add in a array the ingredients to add tags
+    // ⬇ Add in a array the ingredients to add tags ⬇
     function getIngredients() {
         let search = searchBarInBtn.value
         let recipesFound = filterRecipes(recipes)
@@ -257,7 +258,7 @@ function search(recipes) {
         })
     }
     
-    // Display an ingredient for tags in the DOM
+    // ⬇ Display an ingredient for tags in the DOM ⬇
     function displayIngredients() {
         ingredientsList.innerHTML = '';
         ingredientsForDisplay.forEach(ingredient => {
@@ -324,16 +325,16 @@ function displayUstensils() {
 
 // ------------------------------------------------------------------------------------------------------------------
 
-    // Init the search with the search bar
+    // ⬇ Init the search with the search bar ⬇
     function initSearchBar() {
         searchBar.addEventListener('input', function(e){
             let search = searchBar.value;
             let recipesFound = filterRecipes(recipes)
 
-            // If the search bar contains more than 3 characters
+            // ⬇ If the search bar contains more than 3 characters ⬇
             if(search.length >= 3) {
                 initAllSearch()
-                // If there are recipes found after the search
+                // ⬇ If there are recipes found after the search ⬇
                 if(recipesFound.length){
                     cardSection.innerHTML = "";
                     searchIsNull.style.display = 'none';
@@ -356,12 +357,12 @@ function displayUstensils() {
 
 // ------------------------------------------------------------------------------------------------------------------
 
-    // Init the search with the tags
+    // ⬇ Init the search with the tags ⬇
     function initSearchTags() {
         const ingredientsInList = document.querySelectorAll('.ingredient-in-list');
         for(let ingredientInList of ingredientsInList) {
             ingredientInList.addEventListener('click', function(e){
-                tagContent = ingredientInList.text // Add the ingredient name to the tag
+                tagContent = ingredientInList.text // ⬅ Add the ingredient name to the tag
                 tagColor = '#3282F7';
                 displayTag()
                 removeTag()
@@ -396,31 +397,31 @@ function displayUstensils() {
 // ------------------------------------------------------------------------------------------------------------------
     
     function initAllSearch() {
-        filterRecipes(recipes) // Filter the recipes
+        filterRecipes(recipes) // ⬅ Filter the recipes
 
         // INGREDIENTS
-        getIngredients() // modify the list of ingredients for the tags
-        displayIngredients() // display it
-        initSearchTags() // launch the search
+        getIngredients() // ⬅ modify the list of ingredients for the tags
+        displayIngredients() // ⬅ display it
+        initSearchTags() // ⬅ launch the search
 
         // APPLIANCES
-        getAppliances()
+        getAppliances() // ⬅ same for appliances
         displayAppliances()
         initAppliancesSearchTags()
 
         // USTENSILS
-        getUstensils()
+        getUstensils() // ⬅ same for ustensils
         displayUstensils()
         initUstensilsSearchTags()
 
         console.log(tags);
     }
 
-    function filter() {
+    function initTags() {
         // INGREDIENTS
-        getIngredients() // modify the list of ingredients for the tags
-        displayIngredients() // display it
-        initSearchTags() // launch the Search
+        getIngredients() // ⬅ modify the list of ingredients for the tags
+        displayIngredients() // ⬅ display it
+        initSearchTags() // ⬅ launch the search
         searchBarInBtn.addEventListener('input', function(e) {
             getIngredients()
             displayIngredients()
@@ -428,7 +429,7 @@ function displayUstensils() {
         })
 
         // APPLIANCES
-        getAppliances()
+        getAppliances() // ⬅ same for appliances
         displayAppliances()
         initAppliancesSearchTags()
         searchBarInAppliancesBtn.addEventListener('input', function(e){
@@ -438,7 +439,7 @@ function displayUstensils() {
         })
 
         // USTENSILS
-        getUstensils()
+        getUstensils() // ⬅ same for ustensils
         displayUstensils()
         initUstensilsSearchTags()
         searchBarInUstensilsBtn.addEventListener('input', function(e){
@@ -447,20 +448,20 @@ function displayUstensils() {
             initUstensilsSearchTags()
         })
     };
-    
     initSearchBar();
-    filter();
+    initTags();
 };
 
 async function init() {
-    displayFilterBlueBtn(recipes);
-        ingredientsFilter();
-    displayFilterGreenBtn(recipes);
-        appliancesFilter();
+    // ⬇ Tag display and operation ⬇
+    displayFilterBlueBtn(recipes)
+    ingredientsFilter()
+    displayFilterGreenBtn(recipes)
+    appliancesFilter()
     displayFilterRedBtn(recipes)
-        ustensilsFilter()
+    ustensilsFilter()
         
-    displayData(recipes);
-    search(recipes);
+    displayData(recipes) // ⬅ Display recipes
+    search(recipes) // ⬅ Search function 
 };
 init();
