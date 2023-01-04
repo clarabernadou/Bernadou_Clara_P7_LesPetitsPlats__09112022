@@ -141,6 +141,49 @@ export function cardFactory(data) {
         return (container);
     }
 
+    function redBtn(){
+        const container = document.createElement('div');
+        const button = document.createElement('button');
+        const title = document.createElement('h2');
+        const iconDown = document.createElement('i');
+        
+        const containerDisplayNone = document.createElement('div');
+        const inputBtn = document.createElement('button');
+        const input = document.createElement('input');
+        const iconUp = document.createElement('i');
+        const alignBtn = document.createElement('div');
+        const alignSearchList = document.createElement('div');
+
+        // Container
+        container.setAttribute('class', 'container')        
+            // Main button
+            button.setAttribute('class', 'ustensils ustensils_button');
+            title.textContent = "Ustensiles";
+            iconDown.setAttribute('class', 'fas fa-chevron-down');  
+            // Container for buttons
+            containerDisplayNone.setAttribute('class', 'container_display_none');
+
+            // Search bar
+            inputBtn.setAttribute('class', 'ustensils ustensils_input');
+            alignBtn.setAttribute('class', 'align-inside-btn');
+            iconUp.setAttribute('class', 'fas fa-chevron-up');
+            input.setAttribute('placeholder', "Rechercher un ustensile");
+            input.setAttribute('class', 'ustensils_search_input');
+            alignSearchList.setAttribute('class', 'align-ustensils-list');
+
+        // Display in page
+        container.appendChild(button)
+        button.appendChild(title);
+        button.appendChild(iconDown);
+        container.appendChild(containerDisplayNone);
+        containerDisplayNone.appendChild(inputBtn);
+        inputBtn.appendChild(alignBtn);
+        alignBtn.appendChild(input);
+        alignBtn.appendChild(iconUp);
+        inputBtn.appendChild(alignSearchList);
+        return (container);
+    }
+
     function tag() {
         const tag = document.createElement('div');
         const text = document.createElement('p');
@@ -155,5 +198,5 @@ export function cardFactory(data) {
         return(tag)
     }
 
-    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, blueBtn, greenBtn, tag }
+    return { id, name, servings, ingredients, time, description, appliance, ustensils, getCardDOM, blueBtn, greenBtn, redBtn, tag }
 }

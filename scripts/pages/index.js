@@ -27,7 +27,12 @@ function extractAllAppliances(recipes) {
     return [new Set(appliances.flat())]
 };
 
-
+function extractAllUstensils(recipes) {
+    let ustensils = recipes.map(recipe => {
+        return recipe.ustensils.map(u => u.toLowerCase())
+    })
+    return [new Set(ustensils.flat())]
+};
 
 // ------------------------------------------------------------------------------------------------------------------
 
@@ -43,6 +48,13 @@ async function displayFilterGreenBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
     const CardDOM = cardModel.greenBtn();
+    filterSection.appendChild(CardDOM);       
+};
+
+async function displayFilterRedBtn(recipes){
+    const filterSection = document.querySelector(".filter_section");
+    const cardModel = cardFactory(recipes);
+    const CardDOM = cardModel.redBtn();
     filterSection.appendChild(CardDOM);       
 };
 
@@ -99,6 +111,31 @@ function appliancesFilter(){
     });
 };
 
+function ustensilsFilter(){
+    const button = document.querySelector('.ustensils_button');
+    const searchBtn = document.querySelector('.ustensils_input');
+    const buttonIconDown = document.querySelector('.ustensils_button .fa-chevron-down');
+    const inputIconUp = document.querySelector('.ustensils_input .fa-chevron-up');
+    const openSearchBarBtn = document.querySelector('.ustensils_button h2');
+
+    openSearchBarBtn.addEventListener('click', function(e){
+        searchBtn.style.display = 'flex';
+        button.style.display = 'none';
+    });
+
+    // Display search button
+    buttonIconDown.addEventListener('click', function(e){
+        searchBtn.style.display = 'flex';
+        button.style.display = 'none';
+    });
+
+    // Return main button
+    inputIconUp.addEventListener('click', function(e){
+        button.style.display = 'flex';
+        searchBtn.style.display = 'none';
+    });
+};
+
 // ------------------------------------------------------------------------------------------------------------------
 
 // Display recipe cards in the DOM
@@ -118,9 +155,11 @@ function search(recipes) {
 
     const searchBarInBtn = document.querySelector('.ingredients_input input');
     const searchBarInAppliancesBtn = document.querySelector('.appliances_search_input');
+    const searchBarInUstensilsBtn = document.querySelector('.ustensils_search_input');
 
     const ingredientsList = document.querySelector('.align-ingredients-list');
     const appliancesList = document.querySelector('.align-appliances-list');
+    const ustensilsList = document.querySelector('.align-ustensils-list');
 
     const tagSection = document.querySelector('.tag_section');
 
@@ -164,6 +203,7 @@ function search(recipes) {
     let recipesFound // Recipes found after a search
     let ingredientsForDisplay = new Set // The list of ingredients to add tags
     let appliancesForDisplay = new Set
+    let ustensilsForDisplay = new Set
     let tags
 
     function filterRecipes(recipes) {
@@ -186,7 +226,8 @@ function search(recipes) {
             recipesFound = recipesFound.filter(recipe => {
                 return (
                     tags.every(t => recipe.ingredients.includes(t)) ||
-                    tags.every(t => recipe.appliance.toLowerCase().includes(t))
+                    tags.every(t => recipe.appliance.toLowerCase().includes(t)) ||
+                    tags.every(t => recipe.ustensils.includes(t))
                 )
             })
         }
@@ -242,13 +283,40 @@ function search(recipes) {
 
     function displayAppliances() {
         appliancesList.innerHTML = '';
-        appliancesForDisplay.forEach(ustensil => {
+        appliancesForDisplay.forEach(appliance => {
             const a = document.createElement('a');
             a.setAttribute('class', 'appliances-in-list');
-            a.textContent = ustensil
+            a.textContent = appliance
             appliancesList.appendChild(a);
         })
     }
+
+// ------------------------------------------------------------------------------------------------------------------
+
+function getUstensils() {
+    let search = searchBarInUstensilsBtn.value
+    let recipesFound = filterRecipes(recipes)
+    let uniqueUstensils = extractAllUstensils(recipesFound)
+    ustensilsForDisplay = new Set
+
+    uniqueUstensils.filter(ustensils => {
+        for(let ustensil of ustensils) {
+            if(ustensil.includes(search.toLowerCase())) {
+                ustensilsForDisplay.add(ustensil);
+            }
+        }
+    })
+}
+
+function displayUstensils() {
+    ustensilsList.innerHTML = '';
+    ustensilsForDisplay.forEach(ustensil => {
+        const a = document.createElement('a');
+        a.setAttribute('class', 'ustensils-in-list');
+        a.textContent = ustensil
+        ustensilsList.appendChild(a);
+    })
+}
 
 // ------------------------------------------------------------------------------------------------------------------
 
@@ -309,6 +377,18 @@ function search(recipes) {
         }
     };
 
+    function initUstensilsSearchTags() {
+        const ustensilsInList = document.querySelectorAll('.ustensils-in-list');
+        for(let ustensilInList of ustensilsInList) {
+            ustensilInList.addEventListener('click', function(e){
+                tagContent = ustensilInList.text
+                tagColor = '#ED6454';
+                displayTag()
+                removeTag()
+            })
+        }
+    };
+
 // ------------------------------------------------------------------------------------------------------------------
     
     function initAllSearch() {
@@ -323,9 +403,16 @@ function search(recipes) {
         getAppliances()
         displayAppliances()
         initAppliancesSearchTags()
+
+        // USTENSILS
+        getUstensils()
+        displayUstensils()
+        initUstensilsSearchTags()
+
+        console.log(tags);
     }
 
-    function filterIngredients() {
+    function filter() {
         // INGREDIENTS
         getIngredients() // modify the list of ingredients for the tags
         displayIngredients() // display it
@@ -345,10 +432,20 @@ function search(recipes) {
             displayAppliances()
             initAppliancesSearchTags()
         })
+
+        // USTENSILS
+        getUstensils()
+        displayUstensils()
+        initUstensilsSearchTags()
+        searchBarInUstensilsBtn.addEventListener('input', function(e){
+            getUstensils()
+            displayUstensils()
+            initUstensilsSearchTags()
+        })
     };
     
     initSearchBar();
-    filterIngredients();
+    filter();
 };
 
 async function init() {
@@ -356,6 +453,9 @@ async function init() {
         ingredientsFilter();
     displayFilterGreenBtn(recipes);
         appliancesFilter();
+    displayFilterRedBtn(recipes)
+        ustensilsFilter()
+        
     displayData(recipes);
     search(recipes);
 };
