@@ -34,6 +34,9 @@ function extractAllUstensils(recipes) {
     return [new Set(ustensils.flat())]
 };
 
+export function extractUstensils(recipe) {
+    return recipe.ustensils.map(u => u.toLowerCase())
+}
 // ------------------------------------------------------------------------------------------------------------------
 
 // Add blue button in the DOM
@@ -169,7 +172,7 @@ function search(recipes) {
         const text = document.createElement('p');
         const icon = document.createElement('i');
                             
-        tag.setAttribute('class', 'tag blue_tag');
+        tag.setAttribute('class', 'tag');
         tag.style.backgroundColor = tagColor;
         text.setAttribute('class', 'text-ingredient-tag');
         text.textContent = tagContent; 
@@ -224,10 +227,11 @@ function search(recipes) {
         // Filter recipes with tags
         if(tags.length){
             recipesFound = recipesFound.filter(recipe => {
+                let ustensils = extractUstensils(recipe)
                 return (
                     tags.every(t => recipe.ingredients.includes(t)) ||
                     tags.every(t => recipe.appliance.toLowerCase().includes(t)) ||
-                    tags.every(t => recipe.ustensils.includes(t))
+                    tags.every(t => ustensils.includes(t))
                 )
             })
         }
