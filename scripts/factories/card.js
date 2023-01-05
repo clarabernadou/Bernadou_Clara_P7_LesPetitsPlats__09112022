@@ -1,7 +1,3 @@
-import { getRecipes } from '../utils/helper.js';
-
-const { recipes } = await getRecipes();
-
 export function cardFactory(data) {
     const { id, name, servings, ingredients, time, description, appliance, ustensils } = data;
     
@@ -16,7 +12,7 @@ export function cardFactory(data) {
         const icon = document.createElement('i');
         const time = document.createElement('h3');
         const main = document.createElement('main');
-        const ingredientsList = document.createElement('p');
+        const ingredientsList = document.createElement('div');
         const description = document.createElement('p');
 
         // Recipe informations for filter
@@ -29,17 +25,11 @@ export function cardFactory(data) {
             time.textContent = data.time
         // Main card content
         main.setAttribute('class', 'card_content card_main');
-
-        recipes.filter(recipe => {
-            var text = new Array();
-            recipe.ingredients.filter(ingredient => {
-                let all = `${ingredient.ingredient}: ${ingredient.quantity} ${ingredient.unit}\n`;
-                all = all.replace(/undefined/g, "");
-                text.push(all)
-                ingredientsList.textContent = text.join('');              
-            })
+        ingredients.forEach(ingredient => {
+            const ingredients = document.createElement('p');
+            ingredients.textContent = `${ingredient} :`;
+            ingredientsList.appendChild(ingredients);
         })
-
         description.textContent = data.description;
 
         // Display in page
