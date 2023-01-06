@@ -1,5 +1,5 @@
 export function cardFactory(data) {
-    const { id, name, servings, ingredients, time, description, appliance, ustensils } = data;
+    const { id, name, servings, ingredients, quantity, unit, time, description, appliance, ustensils } = data;
     
     // RECIPE CARDS
     function getCardDOM(){
@@ -12,7 +12,10 @@ export function cardFactory(data) {
         const icon = document.createElement('i');
         const time = document.createElement('h3');
         const main = document.createElement('main');
-        const ingredientsList = document.createElement('div');
+        const allList = document.createElement('div');
+        const ingredientsList = document.createElement('ul');
+        const quantityList = document.createElement('ul');
+        const unitList = document.createElement('ul');
         const description = document.createElement('p');
 
         // Recipe informations for filter
@@ -25,11 +28,23 @@ export function cardFactory(data) {
             time.textContent = data.time
         // Main card content
         main.setAttribute('class', 'card_content card_main');
+
         ingredients.forEach(ingredient => {
-            const ingredients = document.createElement('p');
+            const ingredients = document.createElement('li');
             ingredients.textContent = `${ingredient} :`;
             ingredientsList.appendChild(ingredients);
         })
+        quantity.forEach(q => {
+            const quantity = document.createElement('li');
+            quantity.textContent = q;
+            quantityList.appendChild(quantity);
+        })
+        unit.forEach(u => {
+            const unit = document.createElement('li');
+            unit.textContent = u;
+            unitList.appendChild(unit);
+        })
+
         description.textContent = data.description;
 
         // Display in page
@@ -40,7 +55,10 @@ export function cardFactory(data) {
         alignIcon.appendChild(icon);
         alignIcon.appendChild(time);
         article.appendChild(main);
-        main.appendChild(ingredientsList);
+        main.appendChild(allList)
+        allList.appendChild(ingredientsList);
+        allList.appendChild(quantityList);
+        allList.appendChild(unitList);
         main.appendChild(description);
         return(article);
     };

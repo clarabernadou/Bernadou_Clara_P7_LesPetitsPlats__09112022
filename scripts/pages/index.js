@@ -32,6 +32,14 @@ export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
+export function extractUnit(recipe) {
+    return recipe.ingredients.map(i => i.unit)
+}
+
+export function extractQuantity(recipe) {
+    return recipe.ingredients.map(i => i.quantity)
+}
+
 export function extractUstensils(recipe) {
     return recipe.ustensils.map(u => u.toLowerCase())
 }

@@ -251,11 +251,26 @@ button h2 {
 
 .card_main {
     height: 57px;
+    gap: 2em;
+}
+.card_main div {
+    width: 50%;
+    display: flex;
+    gap: 0.5em;
+    justify-content: flex-start;
 }
 
-.card_main p, 
-.card_main li,
-.card_main ul{
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+li {
+    width: fit-content;
+}
+
+.card_main p{
     width: 50%;
     margin: 0;
     padding: 0;
