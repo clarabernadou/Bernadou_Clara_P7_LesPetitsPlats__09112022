@@ -1,9 +1,5 @@
-import { getRecipes } from '../utils/helper.js';
-
-const { recipes } = await getRecipes();
-
 export function cardFactory(data) {
-    const { id, name, servings, ingredients, time, description, appliance, ustensils } = data;
+    const { id, name, servings, ingredients, quantity, unit, time, description, appliance, ustensils } = data;
     
     // RECIPE CARDS
     function getCardDOM(){
@@ -16,7 +12,10 @@ export function cardFactory(data) {
         const icon = document.createElement('i');
         const time = document.createElement('h3');
         const main = document.createElement('main');
-        const ingredientsList = document.createElement('p');
+        const allList = document.createElement('div');
+        const ingredientsList = document.createElement('ul');
+        const quantityList = document.createElement('ul');
+        const unitList = document.createElement('ul');
         const description = document.createElement('p');
 
         // Recipe informations for filter
@@ -30,14 +29,25 @@ export function cardFactory(data) {
         // Main card content
         main.setAttribute('class', 'card_content card_main');
 
-        recipes.filter(recipe => {
-            var text = new Array();
-            recipe.ingredients.filter(ingredient => {
-                let all = `${ingredient.ingredient}: ${ingredient.quantity} ${ingredient.unit}\n`;
-                all = all.replace(/undefined/g, "");
-                text.push(all)
-                ingredientsList.textContent = text.join('');              
-            })
+        ingredients.forEach(ingredient => {
+            const ingredients = document.createElement('li');
+            ingredients.setAttribute('class', 'bold');
+            ingredients.textContent = `${ingredient}:`;
+            ingredientsList.appendChild(ingredients);
+        })
+
+        let quantityResult = quantity.map(v => v === undefined ? '\xa0' : v);
+        quantityResult.forEach(q => {
+            const quantity = document.createElement('li');
+            quantity.textContent = `${q}`;
+            quantityList.appendChild(quantity);
+        })
+        
+        let unitResult = unit.map(v => v === undefined ? '\xa0' : v);
+        unitResult.forEach(u => {
+            const unit = document.createElement('li');
+            unit.textContent = `${u}`;
+            unitList.appendChild(unit);
         })
 
         description.textContent = data.description;
@@ -50,7 +60,10 @@ export function cardFactory(data) {
         alignIcon.appendChild(icon);
         alignIcon.appendChild(time);
         article.appendChild(main);
-        main.appendChild(ingredientsList);
+        main.appendChild(allList)
+        allList.appendChild(ingredientsList);
+        allList.appendChild(quantityList);
+        allList.appendChild(unitList);
         main.appendChild(description);
         return(article);
     };

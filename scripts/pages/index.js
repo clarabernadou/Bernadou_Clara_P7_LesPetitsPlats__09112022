@@ -6,7 +6,6 @@ import { cardFactory } from '../factories/card.js';
 const { recipes } = await getRecipes();
 
 // ⬇ Extract all elements from recipes ⬇
-
 function extractAllIngredients(recipes) {
     let ingredients = recipes.map(recipe => {
         return recipe.ingredients.map(i => i.toLowerCase())
@@ -29,9 +28,16 @@ function extractAllUstensils(recipes) {
 };
 // ------------------------------------------------------------
 // ⬇ Extract the elements of a recipe ⬇
-
 export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
+}
+
+export function extractUnit(recipe) {
+    return recipe.ingredients.map(i => i.unit)
+}
+
+export function extractQuantity(recipe) {
+    return recipe.ingredients.map(i => i.quantity)
 }
 
 export function extractUstensils(recipe) {
@@ -39,7 +45,6 @@ export function extractUstensils(recipe) {
 }
 // ------------------------------------------------------------
 // ⬇ Add blue button in the DOM ⬇
-
 async function displayFilterBlueBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
@@ -47,6 +52,7 @@ async function displayFilterBlueBtn(recipes){
     filterSection.appendChild(CardDOM);       
 };
 
+// ⬇ Add green button in the DOM ⬇
 async function displayFilterGreenBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
@@ -54,6 +60,7 @@ async function displayFilterGreenBtn(recipes){
     filterSection.appendChild(CardDOM);       
 };
 
+// ⬇ Add red button in the DOM ⬇
 async function displayFilterRedBtn(recipes){
     const filterSection = document.querySelector(".filter_section");
     const cardModel = cardFactory(recipes);
@@ -61,7 +68,6 @@ async function displayFilterRedBtn(recipes){
     filterSection.appendChild(CardDOM);       
 };
 // ------------------------------------------------------------
-
 function ingredientsFilter(){
     const button = document.querySelector('.ingredients_button');
     const searchBtn = document.querySelector('.ingredients_input');
@@ -95,6 +101,7 @@ function appliancesFilter(){
     const inputIconUp = document.querySelector('.appliances_input .fa-chevron-up');
     const openSearchBarBtn = document.querySelector('.appliances_button h2');
 
+    // ⬇ Display search button ⬇
     openSearchBarBtn.addEventListener('click', function(e){
         searchBtn.style.display = 'flex';
         button.style.display = 'none';
@@ -120,6 +127,7 @@ function ustensilsFilter(){
     const inputIconUp = document.querySelector('.ustensils_input .fa-chevron-up');
     const openSearchBarBtn = document.querySelector('.ustensils_button h2');
 
+    // ⬇ Display search button ⬇
     openSearchBarBtn.addEventListener('click', function(e){
         searchBtn.style.display = 'flex';
         button.style.display = 'none';
@@ -212,7 +220,7 @@ function search(recipes) {
 
     function filterRecipes(recipes) {
         let search = searchBar.value
-        tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent)
+        let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
 
         // ⬇ Filter recipes with the search bar ⬇
         recipesFound = recipes.filter(recipe => {
@@ -230,8 +238,8 @@ function search(recipes) {
             recipesFound = recipesFound.filter(recipe => {
                 let ustensils = extractUstensils(recipe)
                 return (
-                    tags.every(t => recipe.ingredients.includes(t)) ||
-                    tags.every(t => recipe.appliance.toLowerCase().includes(t)) ||
+                    tags.every(t => recipe.ingredients.includes(t)) &&
+                    tags.every(t => recipe.appliance.toLowerCase().includes(t)) &&
                     tags.every(t => ustensils.includes(t))
                 )
             })
@@ -252,6 +260,10 @@ function search(recipes) {
         uniqueIngredients.filter(ingredients => {
             for(let ingredient of ingredients) {
                 if(ingredient.includes(search.toLowerCase())) {
+                    ingredient = ingredient.replace(' (ou blanc)', '')
+                    ingredient = ingredient.replace(' 1% de matière grasse', '')
+                    ingredient = ingredient.replace(' bretonne ou de toulouse', '')
+                    ingredient = ingredient.replace(' en pépites', '')
                     ingredientsForDisplay.add(ingredient);
                 }
             }
@@ -351,6 +363,7 @@ function displayUstensils() {
                 cardSection.innerHTML = "";
                 searchIsNull.style.display = 'none';
                 displayData(recipes);
+                initAllSearch()
             }
         })
     };
@@ -413,8 +426,6 @@ function displayUstensils() {
         getUstensils() // ⬅ same for ustensils
         displayUstensils()
         initUstensilsSearchTags()
-
-        console.log(tags);
     }
 
     function initTags() {
