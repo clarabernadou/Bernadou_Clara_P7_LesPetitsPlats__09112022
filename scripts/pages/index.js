@@ -178,8 +178,10 @@ function search(recipes) {
         const tag = document.createElement('div');
         const text = document.createElement('p');
         const icon = document.createElement('i');
+
+        console.log(tagClass.textContent);
                             
-        tag.setAttribute('class', 'tag');
+        tag.setAttribute('class', `tag ${tagClass}`);
         tag.style.backgroundColor = tagColor;
         text.setAttribute('class', 'text-ingredient-tag');
         text.textContent = tagContent; 
@@ -210,6 +212,7 @@ function search(recipes) {
     
     let tagContent // ⬅ The name of the ingredient that will be in the tag
     let tagColor // ⬅ To add a color to the tag
+    let tagClass
     let recipesFound // ⬅ Recipes found after a search
 
     let ingredientsForDisplay = new Set // ⬅ The list of ingredients to add tags
@@ -220,7 +223,12 @@ function search(recipes) {
 
     function filterRecipes(recipes) {
         let search = searchBar.value
-        let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
+        tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
+
+        let tagsIngredient = Array.from(document.querySelectorAll(".tag_ingredient")).map(t => t.textContent.toLowerCase())
+        let tagsAppliances = Array.from(document.querySelectorAll(".tag_appliances")).map(t => t.textContent.toLowerCase())
+        let tagsUstensils = Array.from(document.querySelectorAll(".tag_ustensils")).map(t => t.textContent.toLowerCase())
+
 
         // ⬇ Filter recipes with the search bar ⬇
         recipesFound = recipes.filter(recipe => {
@@ -238,9 +246,9 @@ function search(recipes) {
             recipesFound = recipesFound.filter(recipe => {
                 let ustensils = extractUstensils(recipe)
                 return (
-                    tags.every(t => recipe.ingredients.includes(t)) &&
-                    tags.every(t => recipe.appliance.toLowerCase().includes(t)) &&
-                    tags.every(t => ustensils.includes(t))
+                    tagsIngredient.every(t => recipe.ingredients.includes(t)) &&
+                    tagsAppliances.every(t => recipe.appliance.toLowerCase().includes(t)) &&
+                    tagsUstensils.every(t => ustensils.includes(t))
                 )
             })
         }
@@ -377,6 +385,7 @@ function displayUstensils() {
             ingredientInList.addEventListener('click', function(e){
                 tagContent = ingredientInList.text // ⬅ Add the ingredient name to the tag
                 tagColor = '#3282F7';
+                tagClass = 'tag_ingredient'
                 displayTag()
                 removeTag()
             })
@@ -389,6 +398,7 @@ function displayUstensils() {
             applianceInList.addEventListener('click', function(e){
                 tagContent = applianceInList.text
                 tagColor = '#68D9A4';
+                tagClass = 'tag_appliances'
                 displayTag()
                 removeTag()
             })
@@ -401,6 +411,7 @@ function displayUstensils() {
             ustensilInList.addEventListener('click', function(e){
                 tagContent = ustensilInList.text
                 tagColor = '#ED6454';
+                tagClass = 'tag_ustensils'
                 displayTag()
                 removeTag()
             })
