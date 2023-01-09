@@ -175,13 +175,16 @@ button h2 {
 .align-ingredients-list,
 .align-appliances-list,
 .align-ustensils-list {
-    display: flex;
-    flex-direction: column;
     text-align: start;
-    flex-wrap: wrap;
+    column-count: 3;
+    gap: 7em;
     width: 100%;
-    height: 640px;
-    column-gap: 2em;
+}
+
+.ingredient-in-list,
+.appliances-in-list,
+.ustensils-in-list {
+    display: block;
 }
 
 /* RECIPE CARDS */
