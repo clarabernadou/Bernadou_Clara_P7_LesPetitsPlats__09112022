@@ -1,4 +1,4 @@
-import { extractIngredients, extractQuantity, extractUnit, extractUstensils } from '../pages/index.js'
+import { extractIngredients, extractQuantity, extractUnit } from '../pages/index.js'
 
 export async function getRecipes() {
     let jsonFile = "../../data/recipes.json";

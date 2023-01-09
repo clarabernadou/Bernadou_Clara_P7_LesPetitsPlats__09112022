@@ -31,17 +31,22 @@ export function cardFactory(data) {
 
         ingredients.forEach(ingredient => {
             const ingredients = document.createElement('li');
-            ingredients.textContent = `${ingredient} :`;
+            ingredients.setAttribute('class', 'bold');
+            ingredients.textContent = `${ingredient}:`;
             ingredientsList.appendChild(ingredients);
         })
-        quantity.forEach(q => {
+
+        let quantityResult = quantity.map(v => v === undefined ? '\xa0' : v);
+        quantityResult.forEach(q => {
             const quantity = document.createElement('li');
-            quantity.textContent = q;
+            quantity.textContent = `${q}`;
             quantityList.appendChild(quantity);
         })
-        unit.forEach(u => {
+        
+        let unitResult = unit.map(v => v === undefined ? '\xa0' : v);
+        unitResult.forEach(u => {
             const unit = document.createElement('li');
-            unit.textContent = u;
+            unit.textContent = `${u}`;
             unitList.appendChild(unit);
         })
 

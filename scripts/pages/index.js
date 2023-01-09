@@ -220,7 +220,7 @@ function search(recipes) {
 
     function filterRecipes(recipes) {
         let search = searchBar.value
-        tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent)
+        let tags = Array.from(document.querySelectorAll(".tag")).map(t => t.textContent.toLowerCase())
 
         // ⬇ Filter recipes with the search bar ⬇
         recipesFound = recipes.filter(recipe => {
@@ -238,8 +238,8 @@ function search(recipes) {
             recipesFound = recipesFound.filter(recipe => {
                 let ustensils = extractUstensils(recipe)
                 return (
-                    tags.every(t => recipe.ingredients.includes(t)) ||
-                    tags.every(t => recipe.appliance.toLowerCase().includes(t)) ||
+                    tags.every(t => recipe.ingredients.includes(t)) &&
+                    tags.every(t => recipe.appliance.toLowerCase().includes(t)) &&
                     tags.every(t => ustensils.includes(t))
                 )
             })
@@ -264,9 +264,6 @@ function search(recipes) {
                     ingredient = ingredient.replace(' 1% de matière grasse', '')
                     ingredient = ingredient.replace(' bretonne ou de toulouse', '')
                     ingredient = ingredient.replace(' en pépites', '')
-
-
-                    console.log(ingredient);
                     ingredientsForDisplay.add(ingredient);
                 }
             }
@@ -366,6 +363,7 @@ function displayUstensils() {
                 cardSection.innerHTML = "";
                 searchIsNull.style.display = 'none';
                 displayData(recipes);
+                initAllSearch()
             }
         })
     };
@@ -428,8 +426,6 @@ function displayUstensils() {
         getUstensils() // ⬅ same for ustensils
         displayUstensils()
         initUstensilsSearchTags()
-
-        console.log(tags);
     }
 
     function initTags() {
