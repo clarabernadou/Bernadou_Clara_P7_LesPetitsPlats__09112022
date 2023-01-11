@@ -28,26 +28,14 @@ export function cardFactory(data) {
             time.textContent = data.time
         // Main card content
         main.setAttribute('class', 'card_content card_main');
-
+        
         ingredients.forEach(ingredient => {
             const ingredients = document.createElement('li');
-            ingredients.setAttribute('class', 'bold');
-            ingredients.textContent = `${ingredient}:`;
+            ingredients.setAttribute('class', 'replace');
+            
+            ingredients.textContent = `${ingredient.ingredient}: ${ingredient.quantity} ${ingredient.unit}`;
+            ingredients.textContent = ingredients.textContent.replace(/undefined/g, '')
             ingredientsList.appendChild(ingredients);
-        })
-
-        let quantityResult = quantity.map(v => v === undefined ? '\xa0' : v);
-        quantityResult.forEach(q => {
-            const quantity = document.createElement('li');
-            quantity.textContent = `${q}`;
-            quantityList.appendChild(quantity);
-        })
-        
-        let unitResult = unit.map(v => v === undefined ? '\xa0' : v);
-        unitResult.forEach(u => {
-            const unit = document.createElement('li');
-            unit.textContent = `${u}`;
-            unitList.appendChild(unit);
         })
 
         description.textContent = data.description;

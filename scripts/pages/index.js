@@ -32,14 +32,6 @@ export function extractIngredients(recipe) {
     return recipe.ingredients.map(i => i.ingredient.toLowerCase())
 }
 
-export function extractUnit(recipe) {
-    return recipe.ingredients.map(i => i.unit)
-}
-
-export function extractQuantity(recipe) {
-    return recipe.ingredients.map(i => i.quantity)
-}
-
 export function extractUstensils(recipe) {
     return recipe.ustensils.map(u => u.toLowerCase())
 }
@@ -178,8 +170,6 @@ function search(recipes) {
         const tag = document.createElement('div');
         const text = document.createElement('p');
         const icon = document.createElement('i');
-
-        console.log(tagClass.textContent);
                             
         tag.setAttribute('class', `tag ${tagClass}`);
         tag.style.backgroundColor = tagColor;
@@ -199,7 +189,7 @@ function search(recipes) {
     // ⬇ Delete the tag in the DOM ⬇
     function removeTag() {
         const removeTags = document.querySelectorAll('.fa-times-circle');
-        for(let removeTag of removeTags) {
+        removeTags.forEach(removeTag => {
             removeTag.addEventListener('click', function(e){
                 let btn = e.target.closest("div")
                 btn.remove()
@@ -207,7 +197,7 @@ function search(recipes) {
                 cardSection.innerHTML = "";
                 displayData(recipesFound)
             })
-        }
+        })
     }
     
     let tagContent // ⬅ The name of the ingredient that will be in the tag
@@ -266,7 +256,7 @@ function search(recipes) {
         ingredientsForDisplay = new Set
 
         uniqueIngredients.filter(ingredients => {
-            for(let ingredient of ingredients) {
+            ingredients.forEach(ingredient => {
                 if(ingredient.includes(search.toLowerCase())) {
                     ingredient = ingredient.replace(' (ou blanc)', '')
                     ingredient = ingredient.replace(' 1% de matière grasse', '')
@@ -274,7 +264,7 @@ function search(recipes) {
                     ingredient = ingredient.replace(' en pépites', '')
                     ingredientsForDisplay.add(ingredient);
                 }
-            }
+            })
         })
     }
     
@@ -298,11 +288,11 @@ function search(recipes) {
         appliancesForDisplay = new Set
 
         uniqueAppliances.filter(appliances => {
-            for(let appliance of appliances) {
+            appliances.forEach(appliance => {
                 if(appliance.includes(search.toLowerCase())) {
                     appliancesForDisplay.add(appliance);
                 }
-            }
+            })
         })
     }
 
@@ -325,11 +315,11 @@ function getUstensils() {
     ustensilsForDisplay = new Set
 
     uniqueUstensils.filter(ustensils => {
-        for(let ustensil of ustensils) {
+        ustensils.forEach(ustensil => {
             if(ustensil.includes(search.toLowerCase())) {
                 ustensilsForDisplay.add(ustensil);
             }
-        }
+        })
     })
 }
 
@@ -381,7 +371,7 @@ function displayUstensils() {
     // ⬇ Init the search with the tags ⬇
     function initSearchTags() {
         const ingredientsInList = document.querySelectorAll('.ingredient-in-list');
-        for(let ingredientInList of ingredientsInList) {
+        ingredientsInList.forEach(ingredientInList => {
             ingredientInList.addEventListener('click', function(e){
                 tagContent = ingredientInList.text // ⬅ Add the ingredient name to the tag
                 tagColor = '#3282F7';
@@ -389,12 +379,12 @@ function displayUstensils() {
                 displayTag()
                 removeTag()
             })
-        }
+        })
     };
 
     function initAppliancesSearchTags() {
         const appliancesInList = document.querySelectorAll('.appliances-in-list');
-        for(let applianceInList of appliancesInList) {
+        appliancesInList.forEach(applianceInList => {
             applianceInList.addEventListener('click', function(e){
                 tagContent = applianceInList.text
                 tagColor = '#68D9A4';
@@ -402,12 +392,12 @@ function displayUstensils() {
                 displayTag()
                 removeTag()
             })
-        }
+        })
     };
 
     function initUstensilsSearchTags() {
         const ustensilsInList = document.querySelectorAll('.ustensils-in-list');
-        for(let ustensilInList of ustensilsInList) {
+        ustensilsInList.forEach(ustensilInList => {
             ustensilInList.addEventListener('click', function(e){
                 tagContent = ustensilInList.text
                 tagColor = '#ED6454';
@@ -415,7 +405,7 @@ function displayUstensils() {
                 displayTag()
                 removeTag()
             })
-        }
+        })
     };
 
 // ------------------------------------------------------------------------------------------------------------------
